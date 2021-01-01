@@ -49,6 +49,7 @@ class TickerSearchViewController: UIViewController{
         
         //tickerTableView
         tickerTableView.dataSource = self
+        tickerTableView.delegate = self
         tickerTableView.backgroundColor = UIColor.black
         tickerTableView.register(UITableViewCell.self, forCellReuseIdentifier: "tickerCell")
         tickerTableView.translatesAutoresizingMaskIntoConstraints = false
@@ -92,7 +93,7 @@ extension TickerSearchViewController: UITableViewDataSource{
     }
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tickerTableView.dequeueReusableCell(withIdentifier: "tickerCell")!
-        cell.textLabel?.text = tickersToBeDisplayed[indexPath.row].symbol
+        cell.textLabel?.text = tickersToBeDisplayed[indexPath.row].symbol + ": " + tickersToBeDisplayed[indexPath.row].description
         cell.textLabel?.textColor = UIColor.white
         cell.backgroundColor = UIColor.black
         return cell
@@ -100,7 +101,15 @@ extension TickerSearchViewController: UITableViewDataSource{
 }
 
 //extension for UITableView Delegate
-extension TickerSearchViewController: UITableViewDelegate{}
+extension TickerSearchViewController: UITableViewDelegate{
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let selectedTickerSymbol = tickersSymbolsList[indexPath.row].symbol
+        print("clicked")
+        let stockStatsViewController = StockStatsViewController()
+        self.present(stockStatsViewController, animated: true, completion: nil)
+        self.getSelectedStock(ticker: selectedTickerSymbol)
+    }
+}
 
 //extension for UISearchBar Delegate
 extension TickerSearchViewController: UISearchBarDelegate{
@@ -110,8 +119,8 @@ extension TickerSearchViewController: UISearchBarDelegate{
             if searchedTickerText == ""{
                 tickersToBeDisplayed = tickersSymbolsList
             }else{
-                let searchedText = tickerSearchBar.text
-                let filteredResults = tickersSymbolsList.filter{ $0.symbol.contains(searchedText!)}
+                let searchedText = tickerSearchBar.text?.uppercased()
+                let filteredResults = tickersSymbolsList.filter{ $0.symbol.contains(searchedText!) || $0.description.contains(searchedText!)}
                 tickersToBeDisplayed = filteredResults
             }
         }//end of optional bind
@@ -150,7 +159,6 @@ extension TickerSearchViewController{
     
     
     func getAllTickerSymbols(){
-        print("Entered api call")
         let urlString = "http://localhost:3000/ticker-symbols"
         let url = URL(string: urlString)!
         let task = URLSession.shared.dataTask(with: url) { (data, response, error) in
@@ -159,7 +167,6 @@ extension TickerSearchViewController{
                 fatalError("There was an error, either the data was nil or there was an error in the request")
             }//if
             guard let response = response as? HTTPURLResponse, (200...299).contains(response.statusCode)else{
-                print("Error in server")
                 fatalError("There was an error in the response")
             }//guard let
             
@@ -168,6 +175,30 @@ extension TickerSearchViewController{
                 let tickerDataArray = try decoder.decode([Ticker].self, from: data!)
                 self.tickersSymbolsList = tickerDataArray
                 self.tickersToBeDisplayed = tickerDataArray
+            }catch{
+                print (error.localizedDescription)
+                fatalError("Error in convertiong the data into a swift object")
+            }
+        }//end of task
+        task.resume()
+    }//end of function
+    
+    
+    func getSelectedStock(ticker: String){
+        let urlString = "http://localhost:3000/current/" + ticker
+        let url = URL(string: urlString)!
+        let task = URLSession.shared.dataTask(with: url) { (data, response, error) in
+            if (error != nil || data == nil){
+                print(error!.localizedDescription)
+                fatalError("There was an error, either the data was nil or there was an error in the request")
+            }//if
+            guard let response = response as? HTTPURLResponse, (200...299).contains(response.statusCode)else{
+                fatalError("There was an error in the response")
+            }//guard let
+            do{
+                let decoder = JSONDecoder()
+                let requestedStockObject = try decoder.decode(Stock.self, from: data!)
+                print(requestedStockObject.open)
             }catch{
                 print (error.localizedDescription)
                 fatalError("Error in convertiong the data into a swift object")
