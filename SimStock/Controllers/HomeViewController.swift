@@ -113,6 +113,7 @@ class HomeViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        navigationItem.hidesBackButton = false
         //getStockData(ticker: "ibm")
     }
     
@@ -205,6 +206,8 @@ extension HomeViewController{
     @objc
     func tickerSearchButtonAction(sender: UIButton!){
         let tickerView = TickerSearchViewController()
-        self.present(tickerView, animated: true, completion: nil)
+        navigationController?.pushViewController(tickerView, animated: true)
+           
+//        self.present(tickerView, animated: true, completion: nil)
     }
 }

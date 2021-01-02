@@ -15,7 +15,7 @@ class StockStatsViewController: UIViewController{
         willSet{
             DispatchQueue.main.async {
                 print(self.stock)
-                self.stockCurrentPriceLabel.text = self.stock.close
+                self.stockCurrentPriceLabel?.text = self.stock.close
             }
         }
         didSet{
@@ -33,7 +33,7 @@ class StockStatsViewController: UIViewController{
         
         //adding ui elements to main view
         self.view.addSubview(bottomBar)
-        
+        self.view.addSubview(stockCurrentPriceLabel)
         
         //bottomBar
         bottomBar.translatesAutoresizingMaskIntoConstraints = false

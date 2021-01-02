@@ -182,9 +182,11 @@ extension TickerSearchViewController{
     }//end of function
     
     
+    
     func getSelectedStock(ticker: String){
         let urlString = "http://localhost:3000/current/" + ticker
         let url = URL(string: urlString)!
+        print(urlString)
         let task = URLSession.shared.dataTask(with: url) { (data, response, error) in
             if (error != nil || data == nil){
                 print(error!.localizedDescription)
@@ -198,9 +200,13 @@ extension TickerSearchViewController{
                 let stockObject = try decoder.decode(Stock.self, from: data!)
                 
                 let stockStats = StockStats(open: stockObject.open, high: stockObject.high, low: stockObject.low, close: stockObject.close, volume: stockObject.volume, date: stockObject.date)
-                let stockStatsViewController = StockStatsViewController()
-                stockStatsViewController.stock = stockStats
-                self.present(stockStatsViewController, animated: true, completion: nil)
+                DispatchQueue.main.async{
+                    let stockStatsViewController = StockStatsViewController()
+                    stockStatsViewController.stock = stockStats
+                    self.navigationController?.pushViewController(stockStatsViewController, animated: true)
+                }
+
+//                self.present(stockStatsViewController, animated: true, completion: nil)
             }catch{
                 print (error.localizedDescription)
                 fatalError("Error in convertiong the data into a swift object")
