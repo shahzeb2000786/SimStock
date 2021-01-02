@@ -29,13 +29,15 @@ class StockStatsViewController: UIViewController{
         
         //instantiation of ui elements
         self.view.backgroundColor = UIColor.black
-        let bottomBar = Bundle.main.loadNibNamed("BottomBar", owner: nil, options: nil)?.first as! BottomBar
+        let bottomBar = Bundle.main.loadNibNamed("BottomBar", owner: nil, options: nil)?.first as! BottomBar//UINib(nibName: "BottomBar", bundle: Bundle.main) as! BottomBar
         let stockCurrentPriceLabel = UILabel()
+               
         
         //adding ui elements to main view
         self.view.addSubview(bottomBar)
         self.view.addSubview(stockCurrentPriceLabel)
-        
+               
+               
         //bottomBar
         bottomBar.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
@@ -45,16 +47,25 @@ class StockStatsViewController: UIViewController{
         ])
         
         //stockCurrentPriceLabel
-        stockCurrentPriceLabel.backgroundColor = UIColor.gray
+        stockCurrentPriceLabel.textAlignment = .center
+        stockCurrentPriceLabel.font = UIFont(name: stockCurrentPriceLabel.font.fontName, size: 50)
+        stockCurrentPriceLabel.minimumScaleFactor = 0.5
+        stockCurrentPriceLabel.adjustsFontSizeToFitWidth = true
+        stockCurrentPriceLabel.backgroundColor = UIColor.clear
+        stockCurrentPriceLabel.textColor = UIColor.white
+        stockCurrentPriceLabel.translatesAutoresizingMaskIntoConstraints = false
         stockCurrentPriceLabel.text = selectedStock.close
         NSLayoutConstraint.activate([
-            stockCurrentPriceLabel.widthAnchor.constraint(equalToConstant: self.view.frame.width),
-            stockCurrentPriceLabel.heightAnchor.constraint(equalToConstant: self.view.frame.height/10),
-            stockCurrentPriceLabel.bottomAnchor.constraint(equalTo: bottomBar.topAnchor)
+            stockCurrentPriceLabel.widthAnchor.constraint(equalToConstant: self.view.frame.width/1.5),
+            stockCurrentPriceLabel.heightAnchor.constraint(equalToConstant: self.view.frame.height/15),
+           // stockCurrentPriceLabel.bottomAnchor.constraint(equalTo: bottomBar.topAnchor, constant: -15),
+            stockCurrentPriceLabel.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
+            stockCurrentPriceLabel.centerYAnchor.constraint(equalTo: self.view.centerYAnchor)
+
         ])
+        
         //assigning UI elements to class variables
         self.stockCurrentPriceLabel = stockCurrentPriceLabel
-        
     }
     override func viewDidLoad(){
         super.viewDidLoad()
