@@ -105,8 +105,6 @@ extension TickerSearchViewController: UITableViewDelegate{
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let selectedTickerSymbol = tickersSymbolsList[indexPath.row].symbol
         print("clicked")
-        let stockStatsViewController = StockStatsViewController()
-        self.present(stockStatsViewController, animated: true, completion: nil)
         self.getSelectedStock(ticker: selectedTickerSymbol)
     }
 }
@@ -197,8 +195,12 @@ extension TickerSearchViewController{
             }//guard let
             do{
                 let decoder = JSONDecoder()
-                let requestedStockObject = try decoder.decode(Stock.self, from: data!)
-                print(requestedStockObject.open)
+                let stockObject = try decoder.decode(Stock.self, from: data!)
+                
+                let stockStats = StockStats(open: stockObject.open, high: stockObject.high, low: stockObject.low, close: stockObject.close, volume: stockObject.volume, date: stockObject.date)
+                let stockStatsViewController = StockStatsViewController()
+                stockStatsViewController.stock = stockStats
+                self.present(stockStatsViewController, animated: true, completion: nil)
             }catch{
                 print (error.localizedDescription)
                 fatalError("Error in convertiong the data into a swift object")

@@ -16,3 +16,13 @@ struct Stock: Codable{
     var date: String
    
 }
+
+struct StockStats {
+    var open: String
+    var high: String
+    var low: String
+    var close: String
+    var volume: String
+    var date: String
+   
+}

@@ -11,13 +11,14 @@ class HomeViewController: UIViewController {
     
     weak var purchasedStocksTableView: UITableView!
     weak var totalMoneyEarnedLabel: UILabel!
-
+    
     var currentStockPrice: String = ""{
         willSet{
             DispatchQueue.main.async{
                 self.totalMoneyEarnedLabel.text = self.currentStockPrice
             }
         }didSet{}
+    
     }
     
  
