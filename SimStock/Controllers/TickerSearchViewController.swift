@@ -103,9 +103,12 @@ extension TickerSearchViewController: UITableViewDataSource{
 //extension for UITableView Delegate
 extension TickerSearchViewController: UITableViewDelegate{
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let selectedTickerSymbol = tickersSymbolsList[indexPath.row].symbol
-        print("clicked")
-        self.getSelectedStock(ticker: selectedTickerSymbol)
+        let selectedTickerSymbol = tickersToBeDisplayed[indexPath.row].displaySymbol
+        print(selectedTickerSymbol)
+        
+        let stockStatsViewController = StockStatsViewController()
+        stockStatsViewController.selectedStockTicker = selectedTickerSymbol
+       self.navigationController?.pushViewController(stockStatsViewController, animated: true)
     }
 }
 
@@ -180,38 +183,5 @@ extension TickerSearchViewController{
         }//end of task
         task.resume()
     }//end of function
-    
-    
-    
-    func getSelectedStock(ticker: String){
-        let urlString = "http://localhost:3000/current/" + ticker
-        let url = URL(string: urlString)!
-        print(urlString)
-        let task = URLSession.shared.dataTask(with: url) { (data, response, error) in
-            if (error != nil || data == nil){
-                print(error!.localizedDescription)
-                fatalError("There was an error, either the data was nil or there was an error in the request")
-            }//if
-            guard let response = response as? HTTPURLResponse, (200...299).contains(response.statusCode)else{
-                fatalError("There was an error in the response")
-            }//guard let
-            do{
-                let decoder = JSONDecoder()
-                let stockObject = try decoder.decode(Stock.self, from: data!)
-                
-                let stockStats = StockStats(open: stockObject.open, high: stockObject.high, low: stockObject.low, close: stockObject.close, volume: stockObject.volume, date: stockObject.date)
-                DispatchQueue.main.async{
-                    let stockStatsViewController = StockStatsViewController()
-                    stockStatsViewController.stock = stockStats
-                    self.navigationController?.pushViewController(stockStatsViewController, animated: true)
-                }
 
-//                self.present(stockStatsViewController, animated: true, completion: nil)
-            }catch{
-                print (error.localizedDescription)
-                fatalError("Error in convertiong the data into a swift object")
-            }
-        }//end of task
-        task.resume()
-    }//end of function
 }

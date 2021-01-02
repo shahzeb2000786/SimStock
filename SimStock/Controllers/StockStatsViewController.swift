@@ -11,11 +11,12 @@ class StockStatsViewController: UIViewController{
     
     weak var stockCurrentPriceLabel: UILabel!
     
-    var stock: StockStats = StockStats(open: "0",high: "0",low: "0",close: "0",volume: "0",date: "0") {
+    var selectedStockTicker: String = "WMT" //{
+    
+    var selectedStock: Stock = Stock(open: "0",high: "0",low: "0",close: "0",volume: "0",date: "0") {
         willSet{
             DispatchQueue.main.async {
-                print(self.stock)
-                self.stockCurrentPriceLabel?.text = self.stock.close
+                self.stockCurrentPriceLabel?.text = self.selectedStock.close
             }
         }
         didSet{
@@ -45,10 +46,10 @@ class StockStatsViewController: UIViewController{
         
         //stockCurrentPriceLabel
         stockCurrentPriceLabel.backgroundColor = UIColor.gray
-        stockCurrentPriceLabel.text = stock.close
+        stockCurrentPriceLabel.text = selectedStock.close
         NSLayoutConstraint.activate([
             stockCurrentPriceLabel.widthAnchor.constraint(equalToConstant: self.view.frame.width),
-            stockCurrentPriceLabel.heightAnchor.constraint(equalToConstant: self.view.frame.height/2),
+            stockCurrentPriceLabel.heightAnchor.constraint(equalToConstant: self.view.frame.height/10),
             stockCurrentPriceLabel.bottomAnchor.constraint(equalTo: bottomBar.topAnchor)
         ])
         //assigning UI elements to class variables
@@ -57,19 +58,42 @@ class StockStatsViewController: UIViewController{
     }
     override func viewDidLoad(){
         super.viewDidLoad()
-        
+        getSelectedStock(ticker: selectedStockTicker)
     }
 }
 
 
 //extension for any api calls needed for the view controller
 extension StockStatsViewController{
-    func getStockData(){
-        
-    }
+    func getSelectedStock(ticker: String){
+        let urlString = "http://localhost:3000/current/" + ticker
+        print(urlString)
+        print("The fjsl;fj is " + ticker)
+        let url = URL(string: urlString)!
+        let task = URLSession.shared.dataTask(with: url) { (data, response, error) in
+            if error != nil || data == nil{
+                print(error?.localizedDescription)
+                print("There was an error in retreiving information from the Alpha Vantage Api")
+                fatalError("There was an error in retreiving information from the Alpha Vantage Api")
+                
+            }
+            guard let response = response as? HTTPURLResponse, (200...299).contains(response.statusCode)else{
+                print("Error in server")
+                fatalError("Error in getting response from server")
+            }
+            do{
+                let decoder = JSONDecoder()
+                let stockData = try decoder.decode(Stock.self, from: data!)
+                print(stockData)
+                print(ticker)
+                self.selectedStock = stockData
+            }catch{
+                print ("Error in decoding JSON" + error.localizedDescription)
+            }
+            
+        }//end of task
+        task.resume()
+    }//end of getstockData function
 }
-
-    
-    
 
 
