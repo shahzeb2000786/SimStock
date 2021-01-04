@@ -14,6 +14,8 @@
 		BF3237D7258F08D800BA75CF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BF3237D6258F08D800BA75CF /* Assets.xcassets */; };
 		BF3237DA258F08D800BA75CF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BF3237D8258F08D800BA75CF /* LaunchScreen.storyboard */; };
 		BFCE5504259F0A3600706F9D /* StockStatsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFCE5503259F0A3600706F9D /* StockStatsViewController.swift */; };
+		BFCE551125A19FCD00706F9D /* StockStatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFCE550F25A19FCD00706F9D /* StockStatView.swift */; };
+		BFCE551225A19FCD00706F9D /* StockStatView.xib in Resources */ = {isa = PBXBuildFile; fileRef = BFCE551025A19FCD00706F9D /* StockStatView.xib */; };
 		BFDF557C259658BF00C31A4A /* StockModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFDF557B259658BF00C31A4A /* StockModel.swift */; };
 		BFDF5580259712A200C31A4A /* StockInfoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFDF557E259712A200C31A4A /* StockInfoCell.swift */; };
 		BFDF5581259712A200C31A4A /* StockInfoCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = BFDF557F259712A200C31A4A /* StockInfoCell.xib */; };
@@ -33,6 +35,8 @@
 		BF3237D9258F08D800BA75CF /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		BF3237DB258F08D800BA75CF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		BFCE5503259F0A3600706F9D /* StockStatsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StockStatsViewController.swift; sourceTree = "<group>"; };
+		BFCE550F25A19FCD00706F9D /* StockStatView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StockStatView.swift; sourceTree = "<group>"; };
+		BFCE551025A19FCD00706F9D /* StockStatView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = StockStatView.xib; sourceTree = "<group>"; };
 		BFDF557B259658BF00C31A4A /* StockModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StockModel.swift; sourceTree = "<group>"; };
 		BFDF557E259712A200C31A4A /* StockInfoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StockInfoCell.swift; sourceTree = "<group>"; };
 		BFDF557F259712A200C31A4A /* StockInfoCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = StockInfoCell.xib; sourceTree = "<group>"; };
@@ -102,6 +106,8 @@
 				BFDF557F259712A200C31A4A /* StockInfoCell.xib */,
 				BFDF558D2597A5C100C31A4A /* BottomBar.swift */,
 				BFDF55962597A73E00C31A4A /* BottomBar.xib */,
+				BFCE550F25A19FCD00706F9D /* StockStatView.swift */,
+				BFCE551025A19FCD00706F9D /* StockStatView.xib */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -172,6 +178,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BFCE551225A19FCD00706F9D /* StockStatView.xib in Resources */,
 				BF3237DA258F08D800BA75CF /* LaunchScreen.storyboard in Resources */,
 				BFDF5581259712A200C31A4A /* StockInfoCell.xib in Resources */,
 				BF3237D7258F08D800BA75CF /* Assets.xcassets in Resources */,
@@ -195,6 +202,7 @@
 				BF3237D2258F08D600BA75CF /* HomeViewController.swift in Sources */,
 				BFCE5504259F0A3600706F9D /* StockStatsViewController.swift in Sources */,
 				BF3237CE258F08D600BA75CF /* AppDelegate.swift in Sources */,
+				BFCE551125A19FCD00706F9D /* StockStatView.swift in Sources */,
 				BF3237D0258F08D600BA75CF /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

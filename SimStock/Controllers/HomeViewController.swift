@@ -163,7 +163,7 @@ extension HomeViewController{
             do{
                 let decoder = JSONDecoder()
                 let stockData = try decoder.decode(Stock.self, from: data!)
-                self.currentStockPrice = stockData.high
+                self.currentStockPrice = stockData.high!
             }catch{
                 print ("Error in decoding JSON" + error.localizedDescription)
             }

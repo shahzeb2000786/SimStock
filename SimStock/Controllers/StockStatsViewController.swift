@@ -13,10 +13,10 @@ class StockStatsViewController: UIViewController{
     
     var selectedStockTicker: String = "WMT" //{
     
-    var selectedStock: Stock = Stock(open: "0",high: "0",low: "0",close: "0",volume: "0",date: "0") {
+    var selectedStock: Stock = Stock(open: "0", high: "0", low: "0", price: "0" , volume: "0", date: "0", previousClose: "0", change: "0", changePercent: "0", exchange: "0", sector: "0", industry: "0", fiftyTwoHigh: "0", fiftyTwoLow: "0", peRatio: "0", marketCap: "0", dividendYield: "0", fiftyDayMovingAverage: "0", description: "0"){
         willSet{
             DispatchQueue.main.async {
-                self.stockCurrentPriceLabel?.text = self.selectedStock.close
+                self.stockCurrentPriceLabel?.text = self.selectedStock.price
             }
         }
         didSet{
@@ -54,13 +54,14 @@ class StockStatsViewController: UIViewController{
         stockCurrentPriceLabel.backgroundColor = UIColor.clear
         stockCurrentPriceLabel.textColor = UIColor.white
         stockCurrentPriceLabel.translatesAutoresizingMaskIntoConstraints = false
-        stockCurrentPriceLabel.text = selectedStock.close
+        stockCurrentPriceLabel.text = selectedStock.price!
         NSLayoutConstraint.activate([
             stockCurrentPriceLabel.widthAnchor.constraint(equalToConstant: self.view.frame.width/1.5),
             stockCurrentPriceLabel.heightAnchor.constraint(equalToConstant: self.view.frame.height/15),
+            stockCurrentPriceLabel.bottomAnchor.constraint(equalTo: bottomBar.topAnchor),
            // stockCurrentPriceLabel.bottomAnchor.constraint(equalTo: bottomBar.topAnchor, constant: -15),
             stockCurrentPriceLabel.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
-            stockCurrentPriceLabel.centerYAnchor.constraint(equalTo: self.view.centerYAnchor)
+            //stockCurrentPriceLabel.centerYAnchor.constraint(equalTo: self.view.centerYAnchor)
 
         ])
         
@@ -93,6 +94,7 @@ extension StockStatsViewController{
                 fatalError("Error in getting response from server")
             }
             do{
+                print(data)
                 let decoder = JSONDecoder()
                 let stockData = try decoder.decode(Stock.self, from: data!)
                 print(stockData)
