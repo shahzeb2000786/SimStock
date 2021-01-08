@@ -25,7 +25,7 @@ class StockStatsViewController: UIViewController{
                 self.stockStatView.fiftyTwoWeekLowLabel.text = self.selectedStock.fiftyTwoLow
                 self.stockStatView.volumeLabel.text = self.selectedStock.volume
                 self.stockStatView.peRatioLabel.text = self.selectedStock.peRatio
-                self.stockStatView.divYieldLabel.text = self.selectedStock.dividendYield
+                self.stockStatView.dividendYieldLabel.text = self.selectedStock.dividendYield
                 self.stockStatView.marketCapLabel.text = self.selectedStock.marketCap
                 self.stockStatView.fiftyDayMovingAverageLabel.text = self.selectedStock.fiftyDayMovingAverage
 
@@ -42,6 +42,7 @@ class StockStatsViewController: UIViewController{
         //instantiation of ui elements
         self.view.backgroundColor = UIColor.black
         let bottomBar = Bundle.main.loadNibNamed("BottomBar", owner: nil, options: nil)?.first as! BottomBar//UINib(nibName: "BottomBar", bundle: Bundle.main) as! BottomBar
+        
         let stockStatView = Bundle.main.loadNibNamed("StockStatView", owner: nil, options: nil)?.first as! StockStatView
         let stockCurrentPriceLabel = UILabel()
                

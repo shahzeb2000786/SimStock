@@ -9,7 +9,6 @@ import UIKit
 import Foundation
 class StockStatView: UIView{
 
-    
     @IBOutlet weak var openPriceLabel: UILabel!
     @IBOutlet weak var highPriceLabel: UILabel!
     @IBOutlet weak var lowPriceLabel: UILabel!
@@ -17,11 +16,12 @@ class StockStatView: UIView{
     @IBOutlet weak var fiftyTwoWeekLowLabel: UILabel!
     @IBOutlet weak var volumeLabel: UILabel!
     @IBOutlet weak var peRatioLabel: UILabel!
-    
-    @IBOutlet weak var divYieldLabel: UILabel!
+    @IBOutlet weak var dividendYieldLabel: UILabel!
     @IBOutlet weak var marketCapLabel: UILabel!
     @IBOutlet weak var fiftyDayMovingAverageLabel: UILabel!
+
     
+ 
     //    override func viewDidLoad() {
 //        super.viewDidLoad()
 //
