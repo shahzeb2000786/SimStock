@@ -30,11 +30,13 @@ class StockStatsViewController: UIViewController{
         //instantiation of ui elements
         self.view.backgroundColor = UIColor.black
         let bottomBar = Bundle.main.loadNibNamed("BottomBar", owner: nil, options: nil)?.first as! BottomBar//UINib(nibName: "BottomBar", bundle: Bundle.main) as! BottomBar
+        let stockStatView = Bundle.main.loadNibNamed("StockStatView", owner: nil, options: nil)?.first as! StockStatView
         let stockCurrentPriceLabel = UILabel()
                
         
         //adding ui elements to main view
         self.view.addSubview(bottomBar)
+        self.view.addSubview(stockStatView)
         self.view.addSubview(stockCurrentPriceLabel)
                
                
@@ -44,6 +46,14 @@ class StockStatsViewController: UIViewController{
             bottomBar.widthAnchor.constraint(equalToConstant: self.view.frame.width),
             bottomBar.heightAnchor.constraint(equalToConstant: self.view.frame.height/10.5),
             bottomBar.bottomAnchor.constraint(equalTo: self.view.bottomAnchor)
+        ])
+        
+        //stockStatView
+        stockStatView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            stockStatView.widthAnchor.constraint(equalToConstant: self.view.frame.width),
+            stockStatView.heightAnchor.constraint(equalToConstant: self.view.frame.height/2),
+            stockStatView.bottomAnchor.constraint(equalTo: bottomBar.topAnchor)
         ])
         
         //stockCurrentPriceLabel
@@ -58,12 +68,12 @@ class StockStatsViewController: UIViewController{
         NSLayoutConstraint.activate([
             stockCurrentPriceLabel.widthAnchor.constraint(equalToConstant: self.view.frame.width/1.5),
             stockCurrentPriceLabel.heightAnchor.constraint(equalToConstant: self.view.frame.height/15),
-            stockCurrentPriceLabel.bottomAnchor.constraint(equalTo: bottomBar.topAnchor),
-           // stockCurrentPriceLabel.bottomAnchor.constraint(equalTo: bottomBar.topAnchor, constant: -15),
+            stockCurrentPriceLabel.bottomAnchor.constraint(equalTo: stockStatView.topAnchor),
             stockCurrentPriceLabel.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
-            //stockCurrentPriceLabel.centerYAnchor.constraint(equalTo: self.view.centerYAnchor)
-
         ])
+        
+        
+
         
         //assigning UI elements to class variables
         self.stockCurrentPriceLabel = stockCurrentPriceLabel
