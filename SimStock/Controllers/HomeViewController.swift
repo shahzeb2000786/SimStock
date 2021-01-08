@@ -9,10 +9,10 @@ import UIKit
 
 class HomeViewController: UIViewController {
     
-    weak var purchasedStocksTableView: UITableView!
-    weak var totalMoneyEarnedLabel: UILabel!
+    private weak var purchasedStocksTableView: UITableView!
+    private weak var totalMoneyEarnedLabel: UILabel!
     
-    var currentStockPrice: String = ""{
+    private var currentStockPrice: String = ""{
         willSet{
             DispatchQueue.main.async{
                 self.totalMoneyEarnedLabel.text = self.currentStockPrice
@@ -24,7 +24,6 @@ class HomeViewController: UIViewController {
  
     override func loadView(){
         super.loadView()
-       // getAllTickerSymbols()
         
         //instantiation of UI elements for view
         self.view.backgroundColor = UIColor.black
@@ -171,36 +170,7 @@ extension HomeViewController{
         }//end of task
         task.resume()
     }//end of getstockData function
-    
-    
-    func getAllTickerSymbols(){
-        print("Entered api call")
-        let urlString = "http://localhost:3000/ticker-symbols"
-        let url = URL(string: urlString)!
-        let task = URLSession.shared.dataTask(with: url) { (data, response, error) in
-            if (error != nil || data == nil){
-                print(error?.localizedDescription)
-                fatalError("There was an error, either the data was nil or there was an error in the request")
-            }//if
-            guard let response = response as? HTTPURLResponse, (200...299).contains(response.statusCode)else{
-                print("Error in server")
-                fatalError("There was an error in the response")
-            }//guard let
-            
-            do{
-                let decoder = JSONDecoder()
-                let tickerData = try decoder.decode([Ticker].self, from: data!)
-                print(tickerData[0])
-            }catch{
-                print (error.localizedDescription)
-                fatalError("Error in convertiong the data into a swift object")
-            }
-        }//end of task
-        task.resume()
-    }//end of function
 }
-
-
 //extension to handle button actions
 extension HomeViewController{
     @objc
@@ -211,3 +181,4 @@ extension HomeViewController{
 //        self.present(tickerView, animated: true, completion: nil)
     }
 }
+

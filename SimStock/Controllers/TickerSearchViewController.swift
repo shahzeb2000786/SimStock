@@ -9,11 +9,11 @@ import Foundation
 import UIKit
 class TickerSearchViewController: UIViewController{
     
-    weak var tickerTableView: UITableView!
-    weak var tickerSearchBar: UISearchBar!
+    private weak var tickerTableView: UITableView!
+    private weak var tickerSearchBar: UISearchBar!
     
-    var tickersSymbolsList = [Ticker]()//this will contain a list of all the ticker symbols in the market
-    var tickersToBeDisplayed: [Ticker] = []{//this will be the ticker table view's data source and changes depending on the ticker search bar text.
+    private var tickersSymbolsList = [Ticker]()//this will contain a list of all the ticker symbols in the market
+    private var tickersToBeDisplayed: [Ticker] = []{//this will be the ticker table view's data source and changes depending on the ticker search bar text.
         willSet{
             DispatchQueue.main.async{
                 self.tickerTableView.reloadData()

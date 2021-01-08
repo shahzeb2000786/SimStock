@@ -10,6 +10,7 @@ import UIKit
 class StockStatsViewController: UIViewController{
     
     weak var stockCurrentPriceLabel: UILabel!
+    weak var stockStatView: StockStatView!
     
     var selectedStockTicker: String = "WMT" //{
     
@@ -17,6 +18,17 @@ class StockStatsViewController: UIViewController{
         willSet{
             DispatchQueue.main.async {
                 self.stockCurrentPriceLabel?.text = self.selectedStock.price
+                self.stockStatView.openPriceLabel.text = self.selectedStock.price
+                self.stockStatView.highPriceLabel.text = self.selectedStock.high
+                self.stockStatView.lowPriceLabel.text = self.selectedStock.low
+                self.stockStatView.fiftyTwoWeekHighLabel.text = self.selectedStock.fiftyTwoHigh
+                self.stockStatView.fiftyTwoWeekLowLabel.text = self.selectedStock.fiftyTwoLow
+                self.stockStatView.volumeLabel.text = self.selectedStock.volume
+                self.stockStatView.peRatioLabel.text = self.selectedStock.peRatio
+                self.stockStatView.divYieldLabel.text = self.selectedStock.dividendYield
+                self.stockStatView.marketCapLabel.text = self.selectedStock.marketCap
+                self.stockStatView.fiftyDayMovingAverageLabel.text = self.selectedStock.fiftyDayMovingAverage
+
             }
         }
         didSet{
@@ -77,6 +89,7 @@ class StockStatsViewController: UIViewController{
         
         //assigning UI elements to class variables
         self.stockCurrentPriceLabel = stockCurrentPriceLabel
+        self.stockStatView = stockStatView
     }
     override func viewDidLoad(){
         super.viewDidLoad()
