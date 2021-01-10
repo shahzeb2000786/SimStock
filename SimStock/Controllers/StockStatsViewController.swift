@@ -6,7 +6,14 @@
 //
 import Foundation
 import UIKit
+import Charts
 class StockStatsViewController: UIViewController, UINavigationControllerDelegate{
+    
+    lazy var lineChartView: LineChartView = {
+        let chartView  = LineChartView()
+        return chartView
+    }()
+    
     
     weak var stockCurrentPriceLabel: UILabel!
     weak var stockStatView: StockStatView!
@@ -40,9 +47,6 @@ class StockStatsViewController: UIViewController, UINavigationControllerDelegate
 
             }
         }
-        didSet{
-
-        }
     }
     
     override func loadView(){
@@ -53,12 +57,12 @@ class StockStatsViewController: UIViewController, UINavigationControllerDelegate
         let bottomBar = Bundle.main.loadNibNamed("BottomBar", owner: nil, options: nil)?.first as! BottomBar//UINib(nibName: "BottomBar", bundle: Bundle.main) as! BottomBar
         let stockScrollView = UIScrollView()
         stockScrollView.showsHorizontalScrollIndicator = false
-        stockScrollView.contentSize = CGSize(width: self.view.frame.width, height: 2000)
+        stockScrollView.contentSize = CGSize(width: self.view.frame.width, height: 4000)
 
         let stockStatView = Bundle.main.loadNibNamed("StockStatView", owner: nil, options: nil)?.first as! StockStatView
         let stockCurrentPriceLabel = UILabel()
-//
-//        //adding ui elements to main view
+
+        //adding ui elements to main view
         self.view.addSubview(bottomBar)
         self.view.addSubview(stockScrollView)
 
@@ -74,6 +78,7 @@ class StockStatsViewController: UIViewController, UINavigationControllerDelegate
         stockScrollView.backgroundColor = UIColor.red
         stockScrollView.addSubview(stockStatView)
         stockScrollView.addSubview(stockCurrentPriceLabel)
+        stockScrollView.addSubview(lineChartView)
         NSLayoutConstraint.activate([
             stockScrollView.widthAnchor.constraint(equalToConstant: self.view.frame.width),
             stockScrollView.topAnchor.constraint(equalTo: self.view.topAnchor),
@@ -81,8 +86,6 @@ class StockStatsViewController: UIViewController, UINavigationControllerDelegate
         ])
         
         //stockStatView
-//        print("pizza")
-//        print(stockScrollView.bottomAnchor)
         stockStatView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             stockStatView.widthAnchor.constraint(equalToConstant: self.view.frame.width),
@@ -97,15 +100,25 @@ class StockStatsViewController: UIViewController, UINavigationControllerDelegate
         stockCurrentPriceLabel.backgroundColor = UIColor.clear
         stockCurrentPriceLabel.textColor = UIColor.white
         stockCurrentPriceLabel.translatesAutoresizingMaskIntoConstraints = false
-        stockCurrentPriceLabel.text = "Hello there"
+        stockCurrentPriceLabel.text = ""
 
        stockCurrentPriceLabel.text = selectedStock.price!
         NSLayoutConstraint.activate([
             stockCurrentPriceLabel.widthAnchor.constraint(equalToConstant: self.view.frame.width/1.5),
-            stockCurrentPriceLabel.heightAnchor.constraint(equalToConstant: self.view.frame.height/15),
-            stockCurrentPriceLabel.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
+            stockCurrentPriceLabel.heightAnchor.constraint(equalToConstant: self.view.frame.height/12),
+            stockCurrentPriceLabel.bottomAnchor.constraint(equalTo: stockStatView.topAnchor),
+            stockCurrentPriceLabel.centerXAnchor.constraint(equalTo: self.view.centerXAnchor)
         ])
-
+        
+        //lineChartView
+        lineChartView.translatesAutoresizingMaskIntoConstraints = false
+        lineChartView.backgroundColor = UIColor.blue
+        NSLayoutConstraint.activate([
+            lineChartView.widthAnchor.constraint(equalToConstant: self.view.frame.width),
+            lineChartView.heightAnchor.constraint(equalToConstant: self.view.frame.height/2),
+            lineChartView.bottomAnchor.constraint(equalTo: stockStatView.topAnchor),
+//            lineChartView.centerXAnchor.constraint(equalTo: self.view.centerXAnchor)
+        ])
        
         
         

@@ -23,9 +23,11 @@
 		BFDF55972597A73E00C31A4A /* BottomBar.xib in Resources */ = {isa = PBXBuildFile; fileRef = BFDF55962597A73E00C31A4A /* BottomBar.xib */; };
 		BFDF559A2598645800C31A4A /* TickerModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFDF55992598645800C31A4A /* TickerModel.swift */; };
 		BFDF55A12598FE7200C31A4A /* TickerSearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFDF55A02598FE7200C31A4A /* TickerSearchViewController.swift */; };
+		CCABF58A336340A089AE8BE1 /* Pods_SimStock.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D6B1D7894EFBE24AD2448490 /* Pods_SimStock.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		76108C70A46CB465E74D6368 /* Pods-SimStock.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SimStock.debug.xcconfig"; path = "Target Support Files/Pods-SimStock/Pods-SimStock.debug.xcconfig"; sourceTree = "<group>"; };
 		BF3237CA258F08D600BA75CF /* SimStock.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SimStock.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BF3237CD258F08D600BA75CF /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		BF3237CF258F08D600BA75CF /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -44,6 +46,8 @@
 		BFDF55962597A73E00C31A4A /* BottomBar.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = BottomBar.xib; sourceTree = "<group>"; };
 		BFDF55992598645800C31A4A /* TickerModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TickerModel.swift; sourceTree = "<group>"; };
 		BFDF55A02598FE7200C31A4A /* TickerSearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TickerSearchViewController.swift; sourceTree = "<group>"; };
+		D6B1D7894EFBE24AD2448490 /* Pods_SimStock.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SimStock.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		E0913892B290A8B8B6F4765A /* Pods-SimStock.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SimStock.release.xcconfig"; path = "Target Support Files/Pods-SimStock/Pods-SimStock.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -51,17 +55,28 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CCABF58A336340A089AE8BE1 /* Pods_SimStock.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		6752B318C13C2B97AD2B79D5 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				D6B1D7894EFBE24AD2448490 /* Pods_SimStock.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		BF3237C1258F08D600BA75CF = {
 			isa = PBXGroup;
 			children = (
 				BF3237CC258F08D600BA75CF /* SimStock */,
 				BF3237CB258F08D600BA75CF /* Products */,
+				E6ED05880B9A65B27D0D78EC /* Pods */,
+				6752B318C13C2B97AD2B79D5 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -121,6 +136,16 @@
 			path = Model;
 			sourceTree = "<group>";
 		};
+		E6ED05880B9A65B27D0D78EC /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				76108C70A46CB465E74D6368 /* Pods-SimStock.debug.xcconfig */,
+				E0913892B290A8B8B6F4765A /* Pods-SimStock.release.xcconfig */,
+			);
+			name = Pods;
+			path = Pods;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -128,9 +153,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = BF3237DE258F08D800BA75CF /* Build configuration list for PBXNativeTarget "SimStock" */;
 			buildPhases = (
+				5DE605E302D2BB8BEE2A918D /* [CP] Check Pods Manifest.lock */,
 				BF3237C6258F08D600BA75CF /* Sources */,
 				BF3237C7258F08D600BA75CF /* Frameworks */,
 				BF3237C8258F08D600BA75CF /* Resources */,
+				87F8EB59E80EC604397798E9 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -188,6 +215,48 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		5DE605E302D2BB8BEE2A918D /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-SimStock-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		87F8EB59E80EC604397798E9 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-SimStock/Pods-SimStock-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-SimStock/Pods-SimStock-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-SimStock/Pods-SimStock-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		BF3237C6258F08D600BA75CF /* Sources */ = {
@@ -347,6 +416,7 @@
 		};
 		BF3237DF258F08D800BA75CF /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 76108C70A46CB465E74D6368 /* Pods-SimStock.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -366,6 +436,7 @@
 		};
 		BF3237E0258F08D800BA75CF /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = E0913892B290A8B8B6F4765A /* Pods-SimStock.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
