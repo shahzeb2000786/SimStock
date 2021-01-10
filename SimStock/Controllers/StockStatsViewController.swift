@@ -4,7 +4,6 @@
 //
 //  Created by Shahzeb Ahmed on 1/1/21.
 //
-
 import Foundation
 import UIKit
 class StockStatsViewController: UIViewController, UINavigationControllerDelegate{
@@ -26,7 +25,7 @@ class StockStatsViewController: UIViewController, UINavigationControllerDelegate
     var selectedStock: Stock = Stock(open: "0", high: "0", low: "0", price: "0" , volume: "0", date: "0", previousClose: "0", change: "0", changePercent: "0", exchange: "0", sector: "0", industry: "0", fiftyTwoHigh: "0", fiftyTwoLow: "0", peRatio: "0", marketCap: "0", dividendYield: "0", fiftyDayMovingAverage: "0", description: "0"){
         willSet{
             print(selectedStock)
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1.5, execute: {
+            DispatchQueue.main.async{
                 self.stockCurrentPriceLabel?.text = self.selectedStock.price
                 self.stockStatView.openPriceLabel.text = self.selectedStock.open
                 self.stockStatView.highPriceLabel.text = self.selectedStock.high
@@ -39,7 +38,7 @@ class StockStatsViewController: UIViewController, UINavigationControllerDelegate
                 self.stockStatView.marketCapLabel.text = self.selectedStock.marketCap
                 self.stockStatView.fiftyDayMovingAverageLabel.text = self.selectedStock.fiftyDayMovingAverage
 
-            })
+            }
         }
         didSet{
 
@@ -49,11 +48,9 @@ class StockStatsViewController: UIViewController, UINavigationControllerDelegate
     override func loadView(){
         super.loadView()
         self.edgesForExtendedLayout = []//makes items which are put into the view appear under the navigation bar
-
         //instantiation of ui elements
         self.view.backgroundColor = UIColor.black
         let bottomBar = Bundle.main.loadNibNamed("BottomBar", owner: nil, options: nil)?.first as! BottomBar//UINib(nibName: "BottomBar", bundle: Bundle.main) as! BottomBar
-
         let stockScrollView = UIScrollView()
         stockScrollView.showsHorizontalScrollIndicator = false
         stockScrollView.contentSize = CGSize(width: self.view.frame.width, height: 2000)
@@ -122,7 +119,7 @@ class StockStatsViewController: UIViewController, UINavigationControllerDelegate
         super.viewDidLoad()
         navigationController?.delegate = self
         getSelectedStock(ticker: selectedStockTicker)
-        getDailySelectedStock(ticker: selectedStockTicker)
+        //getDailySelectedStock(ticker: selectedStockTicker)
     }
 }
 
@@ -150,7 +147,7 @@ extension StockStatsViewController{
                 let stockData = try decoder.decode(Stock.self, from: data!)
                 print(stockData)
                 print(ticker)
-                //self.selectedStock = stockData
+                self.selectedStock = stockData
             }catch{
                 print ("Error in decoding JSON" + error.localizedDescription)
             }
