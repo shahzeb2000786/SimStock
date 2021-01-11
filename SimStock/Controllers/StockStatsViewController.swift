@@ -32,13 +32,10 @@ class StockStatsViewController: UIViewController, UINavigationControllerDelegate
         willSet{
             yValues = []
             DispatchQueue.main.async{
-                print("pizza")
-                print(self.selectedStockArray)
                 var increment = 0.0
-        
                 for stock in self.selectedStockArray{
+                    print(stock.ticker)
                     let entry = ChartDataEntry(x: increment, y: Double(stock.price!) ?? 0.0)
-                    print("cheese burger")
                     print(entry)
                     self.yValues.append(entry)
                     increment += 1
@@ -73,10 +70,10 @@ class StockStatsViewController: UIViewController, UINavigationControllerDelegate
         self.edgesForExtendedLayout = []//makes items which are put into the view appear under the navigation bar
         //instantiation of ui elements
         self.view.backgroundColor = UIColor.black
-        self.navigationController?.navigationBar.backgroundColor = .clear
-        self.navigationController?.navigationBar.tintColor = .white
+        self.navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
+
         //self.navigationItem?.
-        let bottomBar = Bundle.main.loadNibNamed("BottomBar", owner: nil, options: nil)?.first as! BottomBar//UINib(nibName: "BottomBar", bundle: Bundle.main) as! BottomBar
+        let bottomBar = Bundle.main.loadNibNamed("BottomBar", owner: nil, options: nil)?.first as! BottomBar
         let stockScrollView = UIScrollView()
         stockScrollView.showsHorizontalScrollIndicator = false
         stockScrollView.contentSize = CGSize(width: self.view.frame.width, height: 4000)
@@ -221,7 +218,8 @@ extension StockStatsViewController{
 
 extension StockStatsViewController: ChartViewDelegate{
     func chartValueSelected(_ chartView: ChartViewBase, entry: ChartDataEntry, highlight: Highlight) {
-        print(entry)
+        let indexOfEntry = yValues.firstIndex(of: entry)
+        print(selectedStockArray[indexOfEntry!].date)
     }
     func setData() {
         let set1 = LineChartDataSet(entries: yValues, label: "Stock Graph")
