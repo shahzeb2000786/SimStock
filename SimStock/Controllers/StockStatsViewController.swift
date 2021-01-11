@@ -12,11 +12,10 @@ class StockStatsViewController: UIViewController, UINavigationControllerDelegate
     lazy var lineChartView: LineChartView = {
         let chartView  = LineChartView()
         chartView.rightAxis.enabled = false
-        
-        let yAxis = chartView.leftAxis
-        yAxis.labelFont = .boldSystemFont(ofSize: 12.0)
-        yAxis.labelTextColor = .white
-        
+        chartView.leftAxis.enabled = false
+        //let yAxis = chartView.leftAxis
+       // yAxis.labelFont = .boldSystemFont(ofSize: 12.0)
+       // yAxis.labelTextColor = .white
         chartView.xAxis.labelFont = .boldSystemFont(ofSize: 12.0)
         chartView.xAxis.labelTextColor = .white
         chartView.xAxis.labelPosition = .bottom
@@ -47,9 +46,10 @@ class StockStatsViewController: UIViewController, UINavigationControllerDelegate
     var selectedStock: Stock = Stock(open: "0", high: "0", low: "0", price: "0" , volume: "0", date: "0", previousClose: "0", change: "0", changePercent: "0", exchange: "0", sector: "0", industry: "0", fiftyTwoHigh: "0", fiftyTwoLow: "0", peRatio: "0", marketCap: "0", dividendYield: "0", fiftyDayMovingAverage: "0", description: "0"){
         willSet{
             print(selectedStock)
+            let optionalDollarSign: String? = "$"
             DispatchQueue.main.async{
                 self.navigationItem.title = self.selectedStock.ticker
-                self.stockCurrentPriceLabel?.text = self.selectedStock.price
+                self.stockCurrentPriceLabel?.text = "$" + (self.selectedStock.price ?? "0.00")
                 self.stockStatView.openPriceLabel.text = self.selectedStock.open
                 self.stockStatView.highPriceLabel.text = self.selectedStock.high
                 self.stockStatView.lowPriceLabel.text = self.selectedStock.low
@@ -111,6 +111,15 @@ class StockStatsViewController: UIViewController, UINavigationControllerDelegate
             stockStatView.heightAnchor.constraint(equalToConstant: self.view.frame.height/3),
         ])
 
+        
+        //lineChartView
+        lineChartView.translatesAutoresizingMaskIntoConstraints = false
+        lineChartView.backgroundColor = UIColor.black
+        NSLayoutConstraint.activate([
+            lineChartView.widthAnchor.constraint(equalToConstant: self.view.frame.width),
+            lineChartView.heightAnchor.constraint(equalToConstant: self.view.frame.height/2),
+            lineChartView.bottomAnchor.constraint(equalTo: stockStatView.topAnchor),
+        ])
         //stockCurrentPriceLabel
 
         stockCurrentPriceLabel.textAlignment = .center
@@ -126,19 +135,10 @@ class StockStatsViewController: UIViewController, UINavigationControllerDelegate
         NSLayoutConstraint.activate([
             stockCurrentPriceLabel.widthAnchor.constraint(equalToConstant: self.view.frame.width/1.5),
             stockCurrentPriceLabel.heightAnchor.constraint(equalToConstant: self.view.frame.height/12),
-            stockCurrentPriceLabel.bottomAnchor.constraint(equalTo: stockStatView.topAnchor),
+            stockCurrentPriceLabel.bottomAnchor.constraint(equalTo: lineChartView.topAnchor),
+            stockCurrentPriceLabel.topAnchor.constraint(equalTo: stockScrollView.topAnchor),
             stockCurrentPriceLabel.centerXAnchor.constraint(equalTo: self.view.centerXAnchor)
         ])
-        
-        //lineChartView
-        lineChartView.translatesAutoresizingMaskIntoConstraints = false
-        lineChartView.backgroundColor = UIColor.black
-        NSLayoutConstraint.activate([
-            lineChartView.widthAnchor.constraint(equalToConstant: self.view.frame.width),
-            lineChartView.heightAnchor.constraint(equalToConstant: self.view.frame.height/2),
-            lineChartView.topAnchor.constraint(equalTo: stockStatView.bottomAnchor),
-        ])
-            
         //assigning UI elements to class variables
         self.stockCurrentPriceLabel = stockCurrentPriceLabel
         self.stockStatView = stockStatView
