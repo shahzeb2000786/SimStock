@@ -13,6 +13,9 @@ class StockStatsViewController: UIViewController, UINavigationControllerDelegate
         let chartView  = LineChartView()
         chartView.rightAxis.enabled = false
         chartView.leftAxis.enabled = false
+        chartView.zoomIn()
+        chartView.zoomOut()
+        //chartView.animate(xAxisDuration: 2.0, yAxisDuration: 2.0, easingOption: .easeInOutSine)
         chartView.frame = CGRect(x: 0.0, y: 0.0, width: self.view.frame.width, height: self.view.frame.height/2)
         //let yAxis = chartView.leftAxis
        // yAxis.labelFont = .boldSystemFont(ofSize: 12.0)
@@ -35,11 +38,17 @@ class StockStatsViewController: UIViewController, UINavigationControllerDelegate
                 var increment = 0.0
                 for stock in self.selectedStockArray{
                     let entry = ChartDataEntry(x: increment, y: Double(stock.price!) ?? 0.0)
-                    print(entry)
                     self.yValues.append(entry)
                     increment += 1
                 }
                 self.setData()
+            }
+        }
+    }
+    var selectedStockPrice: String = ""{
+        willSet{
+            DispatchQueue.main.async{
+                self.stockCurrentPriceLabel?.text = "$" + self.selectedStockPrice
             }
         }
     }
@@ -64,98 +73,11 @@ class StockStatsViewController: UIViewController, UINavigationControllerDelegate
         }
     }
     
+    
+    
     override func loadView(){
         super.loadView()
-        self.edgesForExtendedLayout = []//makes items which are put into the view appear under the navigation bar
-        //instantiation of ui elements
-        self.view.backgroundColor = UIColor.black
-        self.navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
-
-        //self.navigationItem?.
-        let bottomBar = Bundle.main.loadNibNamed("BottomBar", owner: nil, options: nil)?.first as! BottomBar
-        let stockScrollView = UIScrollView()
-        
-        let contentView = UIView()
-        let stockStatView = Bundle.main.loadNibNamed("StockStatView", owner: nil, options: nil)?.first as! StockStatView
-        let stockCurrentPriceLabel = UILabel(frame: CGRect(x: 0, y: 0, width: self.view.frame.width/1.25, height: self.view.frame.height/12))
-        contentView.addSubview(stockCurrentPriceLabel)
-        contentView.addSubview(lineChartView)
-        contentView.addSubview(stockStatView)
-        //adding ui elements to main view
-        self.view.addSubview(bottomBar)
-        self.view.addSubview(stockScrollView)
-
-        //bottomBar
-        bottomBar.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            bottomBar.widthAnchor.constraint(equalToConstant: self.view.frame.width),
-            bottomBar.heightAnchor.constraint(equalToConstant: self.view.frame.height/10.5),
-            bottomBar.bottomAnchor.constraint(equalTo: self.view.bottomAnchor)
-        ])
-        
-       
-        //stockScrollView
-        stockScrollView.showsHorizontalScrollIndicator = false
-        stockScrollView.translatesAutoresizingMaskIntoConstraints = false
-        stockScrollView.backgroundColor = UIColor.clear
-        stockScrollView.addSubview(contentView)
-        NSLayoutConstraint.activate([
-            stockScrollView.widthAnchor.constraint(equalToConstant: self.view.frame.width),
-            stockScrollView.topAnchor.constraint(equalTo: self.view.topAnchor),
-            stockScrollView.bottomAnchor.constraint(equalTo: bottomBar.topAnchor)
-        ])
-        
-       
-//        stockScrollView.addSubview(stockStatView)
-//        stockScrollView.addSubview(lineChartView)
-//        stockScrollView.addSubview(stockCurrentPriceLabel)
-
-        //stockStatView
-        stockStatView.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            stockStatView.widthAnchor.constraint(equalToConstant: self.view.frame.width),
-            stockStatView.heightAnchor.constraint(equalToConstant: self.view.frame.height/3),
-        ])
-
-        //lineChartView
-        lineChartView.translatesAutoresizingMaskIntoConstraints = false
-        lineChartView.backgroundColor = UIColor.black
-        NSLayoutConstraint.activate([
-            lineChartView.widthAnchor.constraint(equalToConstant: self.view.frame.width),
-            lineChartView.heightAnchor.constraint(equalToConstant: self.view.frame.height/2),
-            lineChartView.bottomAnchor.constraint(equalTo: stockStatView.topAnchor),
-        ])
-        
-        //stockCurrentPriceLabel
-        stockCurrentPriceLabel.textAlignment = .center
-        stockCurrentPriceLabel.font = UIFont(name: stockCurrentPriceLabel.font.fontName, size: 50)
-        stockCurrentPriceLabel.minimumScaleFactor = 0.5
-        stockCurrentPriceLabel.adjustsFontSizeToFitWidth = true
-        stockCurrentPriceLabel.backgroundColor = UIColor.clear
-        stockCurrentPriceLabel.textColor = UIColor.white
-        stockCurrentPriceLabel.translatesAutoresizingMaskIntoConstraints = false
-        stockCurrentPriceLabel.text = ""
-        
-       stockCurrentPriceLabel.text = selectedStock.price!
-        NSLayoutConstraint.activate([
-            stockCurrentPriceLabel.bottomAnchor.constraint(equalTo: lineChartView.topAnchor),
-            stockCurrentPriceLabel.topAnchor.constraint(equalTo: stockScrollView.topAnchor),
-            stockCurrentPriceLabel.centerXAnchor.constraint(equalTo: self.view.centerXAnchor)
-        ])
-        
-        var subViewsHeight = CGFloat(0)
-        for views in contentView.subviews{
-            print(views.frame.height)
-            subViewsHeight += views.frame.height
-        }
-        print(stockCurrentPriceLabel.frame.height)
-        print(subViewsHeight)
-        print (self.view.frame.height)
-        stockScrollView.contentSize = CGSize(width: self.view.frame.width, height:subViewsHeight)
-
-        //assigning UI elements to class variables
-        self.stockCurrentPriceLabel = stockCurrentPriceLabel
-        self.stockStatView = stockStatView
+        setUpUI()
     }
     override func viewDidLoad(){
         super.viewDidLoad()
@@ -166,7 +88,126 @@ class StockStatsViewController: UIViewController, UINavigationControllerDelegate
         getDailySelectedStock(ticker: selectedStockTicker)
     }
 }
+extension StockStatsViewController{
+    fileprivate func setUpUI() {
+        self.edgesForExtendedLayout = []//makes items which are put into the view appear under the navigation bar
+        self.view.backgroundColor = UIColor.black
+        self.navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
+        
+        //instantiation of ui elements
+        let bottomBar = Bundle.main.loadNibNamed("BottomBar", owner: nil, options: nil)?.first as! BottomBar
+        let stockScrollView = UIScrollView()
+        let stockStatView = Bundle.main.loadNibNamed("StockStatView", owner: nil, options: nil)?.first as! StockStatView
+        let stockCurrentPriceLabel = UILabel(frame: CGRect(x: 0, y: 0, width: self.view.frame.width/1.25, height: self.view.frame.height/12))
+        
+        let purchaseStackView = UIStackView(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: self.view.frame.height/7))
+        let buyButton = UIButton()
+        let sellButton = UIButton()
+        
+        self.view.addSubview(bottomBar)
+        self.view.addSubview(stockScrollView)
+        
+        //bottomBar
+        bottomBar.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            bottomBar.widthAnchor.constraint(equalToConstant: self.view.frame.width),
+            bottomBar.heightAnchor.constraint(equalToConstant: self.view.frame.height/10.5),
+            bottomBar.bottomAnchor.constraint(equalTo: self.view.bottomAnchor)
+        ])
+        
+        
+        //stockScrollView
+        stockScrollView.showsHorizontalScrollIndicator = false
+        stockScrollView.translatesAutoresizingMaskIntoConstraints = false
+        stockScrollView.backgroundColor = UIColor.clear
+        NSLayoutConstraint.activate([
+            stockScrollView.widthAnchor.constraint(equalToConstant: self.view.frame.width),
+            stockScrollView.topAnchor.constraint(equalTo: self.view.topAnchor),
+            stockScrollView.bottomAnchor.constraint(equalTo: bottomBar.topAnchor)
+        ])
+        
+        //adding UI elements to scrollview
+        stockScrollView.addSubview(stockStatView)
+        stockScrollView.addSubview(purchaseStackView)
+        stockScrollView.addSubview(lineChartView)
+        stockScrollView.addSubview(stockCurrentPriceLabel)
+        
+        //stockStatView
+        stockStatView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            stockStatView.widthAnchor.constraint(equalToConstant: self.view.frame.width),
+            stockStatView.heightAnchor.constraint(equalToConstant: self.view.frame.height/3),
+        ])
+        
+        //purchaseButton
+        buyButton.backgroundColor = .systemGreen
+        buyButton.setTitleColor(.white, for: .normal)
+        buyButton.setTitle("Buy", for: .normal)
+        NSLayoutConstraint.activate([
+            buyButton.heightAnchor.constraint(equalToConstant: purchaseStackView.frame.height/2),
+            buyButton.widthAnchor.constraint(equalToConstant: purchaseStackView.frame.width/2.5)
+        ])
+        //sellButton
+        sellButton.backgroundColor = .systemRed
+        sellButton.setTitleColor(.white, for: .normal)
+        NSLayoutConstraint.activate([
+            sellButton.heightAnchor.constraint(equalToConstant: purchaseStackView.frame.height/2),
+        ])
+        sellButton.setTitle("Sell", for: .normal)
+        //purchaseStackView
+        purchaseStackView.translatesAutoresizingMaskIntoConstraints = false
+        purchaseStackView.axis = .horizontal
+        purchaseStackView.alignment = .center
+        purchaseStackView.spacing = 40.0
+        purchaseStackView.backgroundColor = .clear
+        purchaseStackView.distribution = .fillEqually
+        purchaseStackView.addArrangedSubview(buyButton)
+        purchaseStackView.addArrangedSubview(sellButton)
 
+        NSLayoutConstraint.activate([
+            purchaseStackView.heightAnchor.constraint(equalToConstant: self.view.frame.height/7),
+            purchaseStackView.widthAnchor.constraint(equalToConstant: self.view.frame.width/1.25),
+            purchaseStackView.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
+            purchaseStackView.bottomAnchor.constraint(equalTo: stockStatView.topAnchor),
+        ])
+        //lineChartView
+        lineChartView.translatesAutoresizingMaskIntoConstraints = false
+        lineChartView.backgroundColor = UIColor.black
+        NSLayoutConstraint.activate([
+            lineChartView.widthAnchor.constraint(equalToConstant: self.view.frame.width),
+            lineChartView.heightAnchor.constraint(equalToConstant: self.view.frame.height/2),
+            lineChartView.bottomAnchor.constraint(equalTo: purchaseStackView.topAnchor),
+        ])
+        
+        //stockCurrentPriceLabel
+        stockCurrentPriceLabel.textAlignment = .center
+        stockCurrentPriceLabel.font = UIFont(name: stockCurrentPriceLabel.font.fontName, size: 35)
+        stockCurrentPriceLabel.minimumScaleFactor = 0.5
+        stockCurrentPriceLabel.adjustsFontSizeToFitWidth = true
+        stockCurrentPriceLabel.backgroundColor = UIColor.clear
+        stockCurrentPriceLabel.textColor = UIColor.white
+        stockCurrentPriceLabel.translatesAutoresizingMaskIntoConstraints = false
+        stockCurrentPriceLabel.text = ""
+        
+        stockCurrentPriceLabel.text = selectedStock.price!
+        NSLayoutConstraint.activate([
+            stockCurrentPriceLabel.bottomAnchor.constraint(equalTo: lineChartView.topAnchor),
+            stockCurrentPriceLabel.topAnchor.constraint(equalTo: stockScrollView.topAnchor),
+            stockCurrentPriceLabel.centerXAnchor.constraint(equalTo: self.view.centerXAnchor)
+        ])
+        
+        //setting content size for stock scroll view by adding heights of all subviews
+        var subViewsHeight = CGFloat(0)
+        for views in stockScrollView.subviews{
+            subViewsHeight += views.frame.height
+        }
+        stockScrollView.contentSize = CGSize(width: self.view.frame.width, height:subViewsHeight)
+        
+        //assigning UI elements to class variables
+        self.stockCurrentPriceLabel = stockCurrentPriceLabel
+        self.stockStatView = stockStatView
+    }
+}
 
 //extension for any api calls needed for the view controller
 extension StockStatsViewController{
@@ -233,11 +274,16 @@ extension StockStatsViewController{
 extension StockStatsViewController: ChartViewDelegate{
     func chartValueSelected(_ chartView: ChartViewBase, entry: ChartDataEntry, highlight: Highlight) {
         let indexOfEntry = yValues.firstIndex(of: entry)
-        //print(selectedStockArray[indexOfEntry!].date)
+        //lineChartView.lineData?.entryForHighlight(highlight)
+        let selectedPriceAtDate = (selectedStockArray[indexOfEntry!].price)
+        selectedStockPrice = selectedPriceAtDate!
     }
+    
     func setData() {
         let set1 = LineChartDataSet(entries: yValues, label: "Stock Graph")
+        set1.drawValuesEnabled = true
         set1.drawCirclesEnabled = false
+        set1.setColor(.systemGreen)
         let lineChartData = LineChartData(dataSet: set1)
         lineChartView.data = lineChartData
     }
