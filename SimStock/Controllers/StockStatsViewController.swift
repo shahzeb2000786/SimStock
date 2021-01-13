@@ -143,15 +143,20 @@ extension StockStatsViewController{
         buyButton.backgroundColor = .systemGreen
         buyButton.setTitleColor(.white, for: .normal)
         buyButton.setTitle("Buy", for: .normal)
+        buyButton.titleLabel?.font = UIFont(name: (buyButton.titleLabel?.font.fontName)!, size: 30)
+        buyButton.clipsToBounds = true
+        buyButton.layer.cornerRadius = 20
         NSLayoutConstraint.activate([
-            buyButton.heightAnchor.constraint(equalToConstant: purchaseStackView.frame.height/2),
-            buyButton.widthAnchor.constraint(equalToConstant: purchaseStackView.frame.width/2.5)
+            buyButton.heightAnchor.constraint(equalToConstant: purchaseStackView.frame.height/2.5),
         ])
         //sellButton
         sellButton.backgroundColor = .systemRed
         sellButton.setTitleColor(.white, for: .normal)
+        sellButton.titleLabel?.font = UIFont(name: (sellButton.titleLabel?.font.fontName)!, size: 30)
+        sellButton.clipsToBounds = true
+        sellButton.layer.cornerRadius = 20
         NSLayoutConstraint.activate([
-            sellButton.heightAnchor.constraint(equalToConstant: purchaseStackView.frame.height/2),
+            sellButton.heightAnchor.constraint(equalToConstant: purchaseStackView.frame.height/2.5),
         ])
         sellButton.setTitle("Sell", for: .normal)
         //purchaseStackView
