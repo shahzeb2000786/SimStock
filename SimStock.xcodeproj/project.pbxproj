@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -13,9 +13,11 @@
 		BF3237D5258F08D600BA75CF /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BF3237D3258F08D600BA75CF /* Main.storyboard */; };
 		BF3237D7258F08D800BA75CF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BF3237D6258F08D800BA75CF /* Assets.xcassets */; };
 		BF3237DA258F08D800BA75CF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BF3237D8258F08D800BA75CF /* LaunchScreen.storyboard */; };
+		BFBC9F6925B14E54000D7C92 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFBC9F6825B14E54000D7C92 /* LoginViewController.swift */; };
 		BFCE5504259F0A3600706F9D /* StockStatsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFCE5503259F0A3600706F9D /* StockStatsViewController.swift */; };
 		BFCE551125A19FCD00706F9D /* StockStatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFCE550F25A19FCD00706F9D /* StockStatView.swift */; };
 		BFCE551225A19FCD00706F9D /* StockStatView.xib in Resources */ = {isa = PBXBuildFile; fileRef = BFCE551025A19FCD00706F9D /* StockStatView.xib */; };
+		BFCE553225B0145000706F9D /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = BFCE553125B0145000706F9D /* GoogleService-Info.plist */; };
 		BFDF557C259658BF00C31A4A /* StockModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFDF557B259658BF00C31A4A /* StockModel.swift */; };
 		BFDF5580259712A200C31A4A /* StockInfoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFDF557E259712A200C31A4A /* StockInfoCell.swift */; };
 		BFDF5581259712A200C31A4A /* StockInfoCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = BFDF557F259712A200C31A4A /* StockInfoCell.xib */; };
@@ -36,9 +38,11 @@
 		BF3237D6258F08D800BA75CF /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		BF3237D9258F08D800BA75CF /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		BF3237DB258F08D800BA75CF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		BFBC9F6825B14E54000D7C92 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		BFCE5503259F0A3600706F9D /* StockStatsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StockStatsViewController.swift; sourceTree = "<group>"; };
 		BFCE550F25A19FCD00706F9D /* StockStatView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StockStatView.swift; sourceTree = "<group>"; };
 		BFCE551025A19FCD00706F9D /* StockStatView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = StockStatView.xib; sourceTree = "<group>"; };
+		BFCE553125B0145000706F9D /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "GoogleService-Info.plist"; sourceTree = SOURCE_ROOT; };
 		BFDF557B259658BF00C31A4A /* StockModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StockModel.swift; sourceTree = "<group>"; };
 		BFDF557E259712A200C31A4A /* StockInfoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StockInfoCell.swift; sourceTree = "<group>"; };
 		BFDF557F259712A200C31A4A /* StockInfoCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = StockInfoCell.xib; sourceTree = "<group>"; };
@@ -99,6 +103,7 @@
 				BF3237D3258F08D600BA75CF /* Main.storyboard */,
 				BF3237D6258F08D800BA75CF /* Assets.xcassets */,
 				BF3237D8258F08D800BA75CF /* LaunchScreen.storyboard */,
+				BFCE553125B0145000706F9D /* GoogleService-Info.plist */,
 				BF3237DB258F08D800BA75CF /* Info.plist */,
 			);
 			path = SimStock;
@@ -110,6 +115,7 @@
 				BF3237D1258F08D600BA75CF /* HomeViewController.swift */,
 				BFDF55A02598FE7200C31A4A /* TickerSearchViewController.swift */,
 				BFCE5503259F0A3600706F9D /* StockStatsViewController.swift */,
+				BFBC9F6825B14E54000D7C92 /* LoginViewController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -142,7 +148,6 @@
 				76108C70A46CB465E74D6368 /* Pods-SimStock.debug.xcconfig */,
 				E0913892B290A8B8B6F4765A /* Pods-SimStock.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -158,6 +163,7 @@
 				BF3237C7258F08D600BA75CF /* Frameworks */,
 				BF3237C8258F08D600BA75CF /* Resources */,
 				87F8EB59E80EC604397798E9 /* [CP] Embed Pods Frameworks */,
+				6D6DD512880D96F37B10A45D /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -211,6 +217,7 @@
 				BF3237D7258F08D800BA75CF /* Assets.xcassets in Resources */,
 				BFDF55972597A73E00C31A4A /* BottomBar.xib in Resources */,
 				BF3237D5258F08D600BA75CF /* Main.storyboard in Resources */,
+				BFCE553225B0145000706F9D /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -237,6 +244,23 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		6D6DD512880D96F37B10A45D /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-SimStock/Pods-SimStock-resources-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-SimStock/Pods-SimStock-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-SimStock/Pods-SimStock-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		87F8EB59E80EC604397798E9 /* [CP] Embed Pods Frameworks */ = {
@@ -273,6 +297,7 @@
 				BF3237CE258F08D600BA75CF /* AppDelegate.swift in Sources */,
 				BFCE551125A19FCD00706F9D /* StockStatView.swift in Sources */,
 				BF3237D0258F08D600BA75CF /* SceneDelegate.swift in Sources */,
+				BFBC9F6925B14E54000D7C92 /* LoginViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

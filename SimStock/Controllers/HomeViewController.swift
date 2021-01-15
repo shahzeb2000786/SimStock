@@ -6,7 +6,7 @@
 //
 
 import UIKit
-
+import Firebase
 class HomeViewController: UIViewController {
     
     private weak var purchasedStocksTableView: UITableView!
@@ -24,7 +24,13 @@ class HomeViewController: UIViewController {
  
     override func loadView(){
         super.loadView()
-        
+        Auth.auth().createUser(withEmail: "shahzeb2000786@gmail.com", password: "random") { authResult, error in
+            if let error = error {
+                print(error.localizedDescription)
+            } else{
+                print( authResult)
+            }
+        }
         //instantiation of UI elements for view
         self.view.backgroundColor = UIColor.black
         let bottomBar = Bundle.main.loadNibNamed("BottomBar", owner: nil, options: nil)?.first as! BottomBar//UINib(nibName: "BottomBar", bundle: Bundle.main) as! BottomBar

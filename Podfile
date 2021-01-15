@@ -7,4 +7,8 @@ target 'SimStock' do
 
   # Pods for SimStock
   pod 'Charts'
+  pod 'Firebase/Auth'
+  pod 'Firebase/Firestore'
+  pod 'Firebase/Analytics'
+  pod 'GoogleSignIn'
 end
