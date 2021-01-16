@@ -10,7 +10,13 @@ import Firebase
 import GoogleSignIn
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
-   
+    
+    // For client-side use only, global vals to hold google uer info
+    var userId = ""
+    var fullName = ""
+    var lastName = ""
+    var email = ""
+
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         
     
@@ -48,6 +54,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
         }
         guard let authentication = user.authentication else{return}
         let credential = GoogleAuthProvider.credential(withIDToken: authentication.idToken, accessToken: authentication.accessToken)
+        
+        userId = user.userID
+        fullName = user.profile.name
+        lastName = user.profile.givenName
+        email = user.profile.email
+        Auth.auth().signIn(with: credential) { (User, Error) in    //authenticates user's sign in info
+            if let userInfo = User {
+                print("Authentication successful")
+            }
+            else{
+                print("Authentication not successful")
+            }
+        }
+        
     }
     func sign(_ signIn: GIDSignIn!, didDisconnectWith user: GIDGoogleUser!, withError error: Error!) {
         // Perform any operations when the user disconnects from app here.

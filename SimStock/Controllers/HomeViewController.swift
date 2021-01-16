@@ -177,6 +177,7 @@ extension HomeViewController{
         task.resume()
     }//end of getstockData function
 }
+
 //extension to handle button actions
 extension HomeViewController{
     @objc

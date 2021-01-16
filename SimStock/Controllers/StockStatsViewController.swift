@@ -139,13 +139,14 @@ extension StockStatsViewController{
             stockStatView.heightAnchor.constraint(equalToConstant: self.view.frame.height/3),
         ])
         
-        //purchaseButton
+        //buyButton
         buyButton.backgroundColor = .systemGreen
         buyButton.setTitleColor(.white, for: .normal)
         buyButton.setTitle("Buy", for: .normal)
         buyButton.titleLabel?.font = UIFont(name: (buyButton.titleLabel?.font.fontName)!, size: 30)
         buyButton.clipsToBounds = true
         buyButton.layer.cornerRadius = 20
+        buyButton.addTarget(self, action: #selector(buyButtonAction), for: .touchUpInside)
         NSLayoutConstraint.activate([
             buyButton.heightAnchor.constraint(equalToConstant: purchaseStackView.frame.height/2.5),
         ])
@@ -292,6 +293,13 @@ extension StockStatsViewController: ChartViewDelegate{
         let lineChartData = LineChartData(dataSet: set1)
         lineChartView.data = lineChartData
     }
-    
-    
+}
+
+//extension to handle button actions
+extension StockStatsViewController{
+    @objc
+    func buyButtonAction(sender: UIButton!){
+        let purchaseViewController = PurchaseViewController()
+        navigationController?.pushViewController(purchaseViewController, animated: true)
+    }
 }
