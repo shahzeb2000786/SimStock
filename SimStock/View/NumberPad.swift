@@ -8,8 +8,31 @@
 import UIKit
 
 class NumberPad: UIView {
+    @IBOutlet weak var oneKey: UIButton!
+    
+    @IBOutlet weak var twoKey: UIButton!
+    
+    @IBOutlet weak var threeKey: UIButton!
+    
+    @IBOutlet weak var fourKey: UIButton!
+    
+    @IBOutlet weak var fiveKey: UIButton!
+    
+    @IBOutlet weak var sixKey: UIButton!
+    
+    @IBOutlet weak var sevenKey: UIButton!
+    
+    @IBOutlet weak var eightKey: UIButton!
 
-//    override func viewDidLoad() {
+    @IBOutlet weak var nineKey: UIButton!
+    
+    @IBOutlet weak var zeroKey: UIButton!
+    
+    @IBOutlet weak var decimalKey: UIButton!
+    
+    @IBOutlet weak var deleteKey: UIButton!
+    
+    //    override func viewDidLoad() {
 //        super.viewDidLoad()
 //
 //        // Do any additional setup after loading the view.

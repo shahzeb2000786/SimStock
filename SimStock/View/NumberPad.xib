@@ -137,6 +137,20 @@
                 <constraint firstItem="oeo-l5-vmH" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="lTT-pX-1Ll"/>
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <connections>
+                <outlet property="decimalKey" destination="USR-lR-RYl" id="aIi-Zr-Kff"/>
+                <outlet property="deleteKey" destination="j4d-rd-zxj" id="kO6-wW-A9W"/>
+                <outlet property="eightKey" destination="ZKW-z1-WFC" id="u6J-bb-acA"/>
+                <outlet property="fiveKey" destination="qjc-Ly-Vha" id="oo3-CP-5ZU"/>
+                <outlet property="fourKey" destination="yjv-mT-mJ7" id="hAa-dh-Jmg"/>
+                <outlet property="nineKey" destination="9t3-6o-aA7" id="HFc-li-6se"/>
+                <outlet property="oneKey" destination="0Y1-jC-Sk6" id="m61-YV-oPN"/>
+                <outlet property="sevenKey" destination="qhx-cr-EBP" id="kot-OP-flS"/>
+                <outlet property="sixKey" destination="Gvg-Uv-cTr" id="nns-lw-TPi"/>
+                <outlet property="threeKey" destination="U5g-Hq-xrD" id="Lt6-l9-7JA"/>
+                <outlet property="twoKey" destination="2Wb-5G-pZ4" id="1XM-gw-Egg"/>
+                <outlet property="zeroKey" destination="OKc-PK-YTb" id="nPJ-0k-c5l"/>
+            </connections>
             <point key="canvasLocation" x="-45.652173913043484" y="-71.986607142857139"/>
         </view>
     </objects>

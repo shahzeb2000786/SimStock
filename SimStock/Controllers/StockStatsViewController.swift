@@ -160,6 +160,8 @@ extension StockStatsViewController{
             sellButton.heightAnchor.constraint(equalToConstant: purchaseStackView.frame.height/2.5),
         ])
         sellButton.setTitle("Sell", for: .normal)
+        
+        
         //purchaseStackView
         purchaseStackView.translatesAutoresizingMaskIntoConstraints = false
         purchaseStackView.axis = .horizontal
