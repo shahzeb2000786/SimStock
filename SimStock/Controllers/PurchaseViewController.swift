@@ -18,7 +18,7 @@ class PurchaseViewController: UIViewController{
     override func loadView() {
         super.loadView()
         
-        let sharesAmount = UILabel()
+        let sharesAmountLabel = UILabel()
         let sharesPriceLabel = UILabel()
         let totalPriceOwedLabel = UILabel()
         let placeOrderButton = UIButton()
@@ -37,7 +37,7 @@ class PurchaseViewController: UIViewController{
         
         let rando = UILabel()
         let purchaseStockLabelArray = [
-            [sharesAmountIdentifier, sharesAmount],
+            [sharesAmountIdentifier, sharesAmountLabel],
             [sharesPriceIdentifier, sharesPriceLabel],
             [totalPriceOwedIdentifier, totalPriceOwedLabel]
         ]
@@ -55,11 +55,11 @@ class PurchaseViewController: UIViewController{
             var i = 0
             print(labels.count)
             for label in labels{
-                label.text = "random"
                 label.textColor = .white
                 label.backgroundColor = .green
                 label.font = UIFont(name: label.font.fontName, size: 20)
                 stack.addArrangedSubview(label)
+                NSLayoutConstraint.activate([label.widthAnchor.constraint(equalToConstant: stack.frame.width/2.2)])
             }
             mainVerticalStockStack.addArrangedSubview(stack)
         }
@@ -101,20 +101,11 @@ class PurchaseViewController: UIViewController{
         NSLayoutConstraint.activate([
             mainVerticalStockStack.widthAnchor.constraint(equalToConstant: self.view.frame.width),
             mainVerticalStockStack.heightAnchor.constraint(equalToConstant: self.view.frame.height/4),
-            mainVerticalStockStack.bottomAnchor.constraint(equalTo: placeOrderButton.topAnchor)
+            mainVerticalStockStack.bottomAnchor.constraint(equalTo: placeOrderButton.topAnchor, constant: -50)
         ])
-//        sharesAmountLabel.textColor = .white
-//        sharesAmountLabel.backgroundColor = .black
-//        sharesAmountLabel.font = UIFont(name: sharesAmountLabel.font.fontName, size: 35)
-//        sharesAmountLabel.translatesAutoresizingMaskIntoConstraints = false
-//        NSLayoutConstraint.activate([
-//            sharesAmountLabel.widthAnchor.constraint(equalToConstant: self.view.frame.width),
-//            sharesAmountLabel.heightAnchor.constraint(equalToConstant: self.view.frame.height/15),
-//            sharesAmountLabel.bottomAnchor.constraint(equalTo: placeOrderButton.topAnchor)
-//        ])
       
      //assigning ui elements to class variables
-        self.sharesAmountLabel = sharesAmount
+        self.sharesAmountLabel = sharesAmountLabel
         self.sharePriceLabel = sharesPriceLabel
         self.totalPriceOwedLabel = totalPriceOwedLabel
         self.placeOrderButton = placeOrderButton
