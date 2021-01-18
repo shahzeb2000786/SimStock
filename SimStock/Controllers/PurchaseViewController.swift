@@ -15,12 +15,35 @@ class PurchaseViewController: UIViewController{
     private weak var sharePriceLabel: UILabel!
     private weak var totalPriceOwedLabel: UILabel!
     private weak var placeOrderButton: UIButton!
+    
+    var sharePrice: Float = 4.56 {
+        willSet{
+            DispatchQueue.main.async{
+                self.sharesAmountLabel.text = String(self.sharePrice)
+            }
+        }
+    }
+    var quantity: Float = 0{
+        willSet{
+            DispatchQueue.main.async {
+                self.totalPriceOwedLabel.text = String(self.quantity * self.sharePrice)
+            }
+        }
+    }
     override func loadView() {
         super.loadView()
+        self.navigationItem.title = "Buy IBM"
+        self.view.backgroundColor = .black
         
         let sharesAmountLabel = UILabel()
+        //sharesAmountLabel.text = "0"
+        sharesAmountLabel.textAlignment = .right
         let sharesPriceLabel = UILabel()
+        sharesPriceLabel.text = "$0.00"
+        sharesPriceLabel.textAlignment = .right
         let totalPriceOwedLabel = UILabel()
+        totalPriceOwedLabel.text = "$0.00"
+        totalPriceOwedLabel.textAlignment = .right
         let placeOrderButton = UIButton()
         
         let sharesAmountIdentifier = UILabel()
@@ -35,7 +58,6 @@ class PurchaseViewController: UIViewController{
         let totalPriceStack = UIStackView()
         let mainVerticalStockStack = UIStackView()
         
-        let rando = UILabel()
         let purchaseStockLabelArray = [
             [sharesAmountIdentifier, sharesAmountLabel],
             [sharesPriceIdentifier, sharesPriceLabel],
@@ -46,21 +68,25 @@ class PurchaseViewController: UIViewController{
             
             let stack = purchaseStockStackArray[i]
             let labels = purchaseStockLabelArray[i]
-            stack.frame = CGRect(x: 0, y: 0, width: self.view.frame.width/1.2, height: self.view.frame.height/14)
+            stack.frame = CGRect(x: 0, y: 0, width: self.view.frame.width/1.1, height: self.view.frame.height/14)
             stack.axis = .horizontal
             stack.alignment = .fill
-            stack.spacing = 50
+            stack.spacing = 20
             stack.backgroundColor = .clear
             stack.distribution = .fillEqually
             var i = 0
             print(labels.count)
             for label in labels{
+
                 label.textColor = .white
-                label.backgroundColor = .green
                 label.font = UIFont(name: label.font.fontName, size: 20)
                 stack.addArrangedSubview(label)
                 NSLayoutConstraint.activate([label.widthAnchor.constraint(equalToConstant: stack.frame.width/2.2)])
             }
+            var bottomBorder = CALayer()
+            bottomBorder.frame = CGRect(x: 0, y: stack.frame.height - 1, width: stack.frame.width, height: 1)
+            bottomBorder.backgroundColor = UIColor.darkGray.cgColor
+            stack.layer.addSublayer(bottomBorder)
             mainVerticalStockStack.addArrangedSubview(stack)
         }
 
@@ -69,6 +95,8 @@ class PurchaseViewController: UIViewController{
         self.view.addSubview(placeOrderButton)
         self.view.addSubview(mainVerticalStockStack)
         
+        
+ 
         //numberPad
         numberPad.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
@@ -92,7 +120,6 @@ class PurchaseViewController: UIViewController{
         
         //mainVerticalStockStack
         mainVerticalStockStack.backgroundColor = .clear
-        mainVerticalStockStack.backgroundColor = .gray
         mainVerticalStockStack.axis = .vertical
         mainVerticalStockStack.alignment = .center
         mainVerticalStockStack.spacing = 5
@@ -101,7 +128,7 @@ class PurchaseViewController: UIViewController{
         NSLayoutConstraint.activate([
             mainVerticalStockStack.widthAnchor.constraint(equalToConstant: self.view.frame.width),
             mainVerticalStockStack.heightAnchor.constraint(equalToConstant: self.view.frame.height/4),
-            mainVerticalStockStack.bottomAnchor.constraint(equalTo: placeOrderButton.topAnchor, constant: -50)
+            mainVerticalStockStack.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor)
         ])
       
      //assigning ui elements to class variables
@@ -135,15 +162,23 @@ extension PurchaseViewController{
     func keyPressed(sender: UIButton!){
         if let sharesText = sharesAmountLabel.text{
             sharesAmountLabel.text = sharesText + (sender.titleLabel?.text)!
+
         }else{ sharesAmountLabel.text = sender.titleLabel?.text}
+        self.quantity = Float(sharesAmountLabel.text!) ?? 0.00
     }
     
     @objc
     func deleteKeyPressed(sender: UIButton!){
         if var sharesText = sharesAmountLabel.text{
-            sharesAmountLabel.text?.removeLast()
-        }
-    }
-}
+            if sharesText.count == 0{
+                self.quantity = 0
+            }
+            else{
+                sharesAmountLabel.text?.removeLast()
+                self.quantity = Float(sharesAmountLabel.text!) ?? 0.00
+            }
+        }//end of optional bind
+    }//end of function
+}//end of extension
 
 
