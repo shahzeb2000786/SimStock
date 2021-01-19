@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		BF26C48725B60A6C0099B3BD /* FirebaseFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF26C48625B60A6C0099B3BD /* FirebaseFunctions.swift */; };
 		BF3237CE258F08D600BA75CF /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF3237CD258F08D600BA75CF /* AppDelegate.swift */; };
 		BF3237D0258F08D600BA75CF /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF3237CF258F08D600BA75CF /* SceneDelegate.swift */; };
 		BF3237D2258F08D600BA75CF /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF3237D1258F08D600BA75CF /* HomeViewController.swift */; };
@@ -33,6 +34,7 @@
 
 /* Begin PBXFileReference section */
 		76108C70A46CB465E74D6368 /* Pods-SimStock.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SimStock.debug.xcconfig"; path = "Target Support Files/Pods-SimStock/Pods-SimStock.debug.xcconfig"; sourceTree = "<group>"; };
+		BF26C48625B60A6C0099B3BD /* FirebaseFunctions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseFunctions.swift; sourceTree = "<group>"; };
 		BF3237CA258F08D600BA75CF /* SimStock.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SimStock.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BF3237CD258F08D600BA75CF /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		BF3237CF258F08D600BA75CF /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -147,6 +149,7 @@
 			children = (
 				BFDF557B259658BF00C31A4A /* StockModel.swift */,
 				BFDF55992598645800C31A4A /* TickerModel.swift */,
+				BF26C48625B60A6C0099B3BD /* FirebaseFunctions.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -305,6 +308,7 @@
 				BFDF55A12598FE7200C31A4A /* TickerSearchViewController.swift in Sources */,
 				BF3237D2258F08D600BA75CF /* HomeViewController.swift in Sources */,
 				BFCE5504259F0A3600706F9D /* StockStatsViewController.swift in Sources */,
+				BF26C48725B60A6C0099B3BD /* FirebaseFunctions.swift in Sources */,
 				BF3237CE258F08D600BA75CF /* AppDelegate.swift in Sources */,
 				BFBC9F8C25B2B149000D7C92 /* PurchaseViewController.swift in Sources */,
 				BFCE551125A19FCD00706F9D /* StockStatView.swift in Sources */,

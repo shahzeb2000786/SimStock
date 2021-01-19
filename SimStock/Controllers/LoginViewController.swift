@@ -48,6 +48,7 @@ class LoginViewController: UIViewController, GIDSignInDelegate{
                 self.appDelegate.lastName = user.profile.givenName
                 self.createUser(email: self.appDelegate.email)
                 let homeViewController = HomeViewController()
+                
                 self.navigationController?.pushViewController(homeViewController, animated: true)
                }
                else{
@@ -73,6 +74,8 @@ class LoginViewController: UIViewController, GIDSignInDelegate{
                }//if
            }//else
          }//getDocuments
+        appDelegate.email = email
+      //  appDelegate.
     }//createUser function
 }
 

@@ -4,7 +4,6 @@
 //
 //  Created by Shahzeb Ahmed on 1/16/21.
 //
-
 import Foundation
 import UIKit
 
@@ -16,7 +15,8 @@ class PurchaseViewController: UIViewController{
     private weak var totalPriceOwedLabel: UILabel!
     private weak var placeOrderButton: UIButton!
     
-    var sharePrice: Float = 4.56 {
+    var ticker: String = ""
+    var sharePrice: Float = 1.00 {
         willSet{
             DispatchQueue.main.async{
                 self.sharesAmountLabel.text = String(self.sharePrice)
@@ -32,7 +32,7 @@ class PurchaseViewController: UIViewController{
     }
     override func loadView() {
         super.loadView()
-        self.navigationItem.title = "Buy IBM"
+        self.navigationItem.title = "Buy " + ticker
         self.view.backgroundColor = .black
         
         let sharesAmountLabel = UILabel()
@@ -89,13 +89,12 @@ class PurchaseViewController: UIViewController{
             stack.layer.addSublayer(bottomBorder)
             mainVerticalStockStack.addArrangedSubview(stack)
         }
-
+        
         
         self.view.addSubview(numberPad)
         self.view.addSubview(placeOrderButton)
         self.view.addSubview(mainVerticalStockStack)
-        
-        
+            
  
         //numberPad
         numberPad.translatesAutoresizingMaskIntoConstraints = false
@@ -106,6 +105,7 @@ class PurchaseViewController: UIViewController{
         ])
         
         placeOrderButton.translatesAutoresizingMaskIntoConstraints = false
+        placeOrderButton.isUserInteractionEnabled = true
         placeOrderButton.backgroundColor = .systemGreen
         placeOrderButton.setTitle("Place Order", for: .normal)
         placeOrderButton.setTitleColor(.white, for: .normal)
@@ -117,6 +117,7 @@ class PurchaseViewController: UIViewController{
             placeOrderButton.bottomAnchor.constraint(equalTo: numberPad.topAnchor)
             
         ])
+        
         
         //mainVerticalStockStack
         mainVerticalStockStack.backgroundColor = .clear
@@ -136,7 +137,6 @@ class PurchaseViewController: UIViewController{
         self.sharePriceLabel = sharesPriceLabel
         self.totalPriceOwedLabel = totalPriceOwedLabel
         self.placeOrderButton = placeOrderButton
-
     }
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -153,6 +153,8 @@ class PurchaseViewController: UIViewController{
         numberPad.zeroKey.addTarget(self, action: #selector(keyPressed), for: .touchUpInside)
         numberPad.deleteKey.addTarget(self, action: #selector(deleteKeyPressed), for: .touchUpInside)
         numberPad.decimalKey.addTarget(self, action: #selector(keyPressed), for: .touchUpInside)
+        
+        placeOrderButton.addTarget(self, action: #selector(placeOrderButtonPressed), for: .touchUpInside)
     }
 }
 
@@ -179,6 +181,16 @@ extension PurchaseViewController{
             }
         }//end of optional bind
     }//end of function
+    
+    @objc
+    func placeOrderButtonPressed(sender: UIButton!){
+        
+        let firebaseFuncs = FirebaseFunctions()
+        firebaseFuncs.addStockToUser(tickerSymbol: ticker, quantity: quantity, stockPrice: sharePrice)
+    }//end of function
 }//end of extension
+
+
+
 
 
