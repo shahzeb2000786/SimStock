@@ -10,22 +10,24 @@ import UIKit
 class PurchaseViewController: UIViewController{
     private let numberPad = Bundle.main.loadNibNamed("NumberPad", owner: nil, options: nil)?.first as! NumberPad
     
-    private weak var sharesAmountLabel: UILabel!
+    private weak var numberOfSharesLabel: UILabel!
     private weak var sharePriceLabel: UILabel!
     private weak var totalPriceOwedLabel: UILabel!
     private weak var placeOrderButton: UIButton!
     
     var ticker: String = ""
-    var sharePrice: Float = 1.00 {
+    var sharePrice: Float = 0.00 {
         willSet{
             DispatchQueue.main.async{
-                self.sharesAmountLabel.text = String(self.sharePrice)
-            }
-        }
+                    self.sharePriceLabel.text = String(self.sharePrice) 
+
+            }//DispatchQueue
+        }//willSet
     }
     var quantity: Float = 0{
         willSet{
             DispatchQueue.main.async {
+                self.numberOfSharesLabel.text = String(self.quantity)
                 self.totalPriceOwedLabel.text = String(self.quantity * self.sharePrice)
             }
         }
@@ -35,9 +37,9 @@ class PurchaseViewController: UIViewController{
         self.navigationItem.title = "Buy " + ticker
         self.view.backgroundColor = .black
         
-        let sharesAmountLabel = UILabel()
+        let numberOfSharesLabel = UILabel()
         //sharesAmountLabel.text = "0"
-        sharesAmountLabel.textAlignment = .right
+        numberOfSharesLabel.textAlignment = .right
         let sharesPriceLabel = UILabel()
         sharesPriceLabel.text = "$0.00"
         sharesPriceLabel.textAlignment = .right
@@ -59,7 +61,7 @@ class PurchaseViewController: UIViewController{
         let mainVerticalStockStack = UIStackView()
         
         let purchaseStockLabelArray = [
-            [sharesAmountIdentifier, sharesAmountLabel],
+            [sharesAmountIdentifier, numberOfSharesLabel],
             [sharesPriceIdentifier, sharesPriceLabel],
             [totalPriceOwedIdentifier, totalPriceOwedLabel]
         ]
@@ -133,7 +135,7 @@ class PurchaseViewController: UIViewController{
         ])
       
      //assigning ui elements to class variables
-        self.sharesAmountLabel = sharesAmountLabel
+        self.numberOfSharesLabel = numberOfSharesLabel
         self.sharePriceLabel = sharesPriceLabel
         self.totalPriceOwedLabel = totalPriceOwedLabel
         self.placeOrderButton = placeOrderButton
@@ -162,22 +164,26 @@ class PurchaseViewController: UIViewController{
 extension PurchaseViewController{
     @objc
     func keyPressed(sender: UIButton!){
-        if let sharesText = sharesAmountLabel.text{
-            sharesAmountLabel.text = sharesText + (sender.titleLabel?.text)!
+        if let sharesText = numberOfSharesLabel.text{
+            numberOfSharesLabel.text = sharesText + (sender.titleLabel?.text)!
 
-        }else{ sharesAmountLabel.text = sender.titleLabel?.text}
-        self.quantity = Float(sharesAmountLabel.text!) ?? 0.00
+        }else{ numberOfSharesLabel.text = sender.titleLabel?.text}
+        self.quantity = Float(numberOfSharesLabel.text!) ?? 0.00
     }
     
     @objc
     func deleteKeyPressed(sender: UIButton!){
-        if var sharesText = sharesAmountLabel.text{
+        if var sharesText = numberOfSharesLabel.text{
+            print(sharesText)
             if sharesText.count == 0{
+                numberOfSharesLabel.text? = ""
                 self.quantity = 0
             }
             else{
-                sharesAmountLabel.text?.removeLast()
-                self.quantity = Float(sharesAmountLabel.text!) ?? 0.00
+                print("delete hit")
+                numberOfSharesLabel.text?.removeLast()
+                print(numberOfSharesLabel.text)
+                self.quantity = Float(numberOfSharesLabel.text!) ?? 0.00
             }
         }//end of optional bind
     }//end of function
@@ -186,7 +192,10 @@ extension PurchaseViewController{
     func placeOrderButtonPressed(sender: UIButton!){
         
         let firebaseFuncs = FirebaseFunctions()
-        firebaseFuncs.addStockToUser(tickerSymbol: ticker, quantity: quantity, stockPrice: sharePrice)
+        if ticker != "" && quantity != 0 && sharePrice != 0{
+            firebaseFuncs.addStockToUser(tickerSymbol: ticker, quantity: quantity, stockPrice: sharePrice)
+        }
+        
     }//end of function
 }//end of extension
 

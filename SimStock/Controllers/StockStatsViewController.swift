@@ -303,7 +303,10 @@ extension StockStatsViewController{
     func buyButtonAction(sender: UIButton!){
         let purchaseViewController = PurchaseViewController()
         purchaseViewController.ticker = selectedStockTicker
-        purchaseViewController.sharePrice = Float(selectedStockPrice) ?? 0.00
-        navigationController?.pushViewController(purchaseViewController, animated: true)
+        if let floatStockPrice = selectedStock.price{
+            purchaseViewController.sharePrice = Float(floatStockPrice) ?? 0.00
+            navigationController?.pushViewController(purchaseViewController, animated: true)
+
+        }
     }
 }
