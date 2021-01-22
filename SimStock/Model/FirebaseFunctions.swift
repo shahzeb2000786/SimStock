@@ -24,7 +24,6 @@ struct FirebaseFunctions{
                 guard var userCurrentBalance = document.get("currentBalance") as? Float else{return}
                 let amountDueForPayment = quantity * stockPrice
                 let updatedUserBalance = userCurrentBalance - amountDueForPayment
-
                 guard let currentStocks = document.get("stocks") as? NSDictionary else {
                     print(error?.localizedDescription)
                     return}
@@ -44,8 +43,8 @@ struct FirebaseFunctions{
                         let stockToAdd = ["ticker": tickerSymbol, "quantity": currentNumOfStockOwned, "totalAmountPaid": totalSpentOnStock] as [String : Any]
                         userDoc.updateData(["stocks." + tickerSymbol : stockToAdd, "currentBalance": updatedUserBalance])
                         return
-                    }
-                }
+                    }//end of if statement
+                }//end of for loop
                 let stockToAdd = ["ticker": tickerSymbol, "quantity": quantity, "totalAmountPaid": amountDueForPayment] as [String : Any]
                 userDoc.updateData(["stocks." + tickerSymbol : stockToAdd, "currentBalance": updatedUserBalance])
             }//optional bind of document
@@ -54,7 +53,24 @@ struct FirebaseFunctions{
         
     }//end of addStockToUser function
     
-    func addPreviouslyPurchasedStock(){
+    func sellUserStock(ticker: String){
+        let userDoc = db.collection("Users").document(appDelegate.email)
+        userDoc.getDocument { (document, error) in
+            if let error = error{
+                print(error.localizedDescription)
+                return
+            }
+            if let document = document{
+                guard var userCurrentBalance = document.get("currentBalance") as? Float else{return}
+              //  let amountDueForPayment = quantity * stockPrice
+                let updatedUserBalance = userCurrentBalance - amountDueForPayment
+                guard let currentStocks = document.get("stocks") as? NSDictionary else {
+                    print(error?.localizedDescription)
+                    return}
+            }
+        }
+    }
+    func getUserStock(tickerArray: [String]){
         
     }
     
