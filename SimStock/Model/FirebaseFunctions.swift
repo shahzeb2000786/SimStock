@@ -53,8 +53,9 @@ struct FirebaseFunctions{
         
     }//end of addStockToUser function
     
-    func sellUserStock(ticker: String){
+    func sellUserStock(tickerSymbol: String, quantity: Float, stockPrice: Float){
         let userDoc = db.collection("Users").document(appDelegate.email)
+        let stockSellAmount = quantity * stockPrice
         userDoc.getDocument { (document, error) in
             if let error = error{
                 print(error.localizedDescription)
@@ -62,14 +63,31 @@ struct FirebaseFunctions{
             }
             if let document = document{
                 guard var userCurrentBalance = document.get("currentBalance") as? Float else{return}
-              //  let amountDueForPayment = quantity * stockPrice
-                let updatedUserBalance = userCurrentBalance - amountDueForPayment
+               // let updatedUserBalance = userCurrentBalance - amountDueForPayment//
                 guard let currentStocks = document.get("stocks") as? NSDictionary else {
-                    print(error?.localizedDescription)
+                    print(error?.localizedDescription ?? "Could not get stocks as NSdictioanry")
                     return}
-            }
-        }
-    }
+                for (tickerKey, stockObject) in currentStocks{
+                    guard let tickerKey = tickerKey as? String else{return}
+                    if tickerKey == tickerSymbol{
+                        guard let previouslyPurchasedStock = stockObject as? NSDictionary else{ return}
+
+                        guard let currentNumOfStockOwned = previouslyPurchasedStock["quantity"] as? Float else{return}
+                        
+                        //checks if user tried to purhase more stock than they owned
+                        if (currentNumOfStockOwned < quantity){
+                            return
+                        }
+                        //userCurrentBalance += stockSellAmount
+                        let updatedQuantity = currentNumOfStockOwned - quantity
+                        let updatedSoldStock = ["ticker": tickerSymbol, "quantity": updatedQuantity, "totalAmountPaid": userCurrentBalance] as [String : Any]
+                        userDoc.updateData(["stocks." + tickerSymbol : updatedSoldStock, "currentBalance": userCurrentBalance])
+                    }
+                }//for loop
+            }//optional bind of document
+            print("successfully deleted stock")
+        }//end of closure
+    }//end of function
     func getUserStock(tickerArray: [String]){
         
     }

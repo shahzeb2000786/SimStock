@@ -156,6 +156,7 @@ extension StockStatsViewController{
         sellButton.titleLabel?.font = UIFont(name: (sellButton.titleLabel?.font.fontName)!, size: 30)
         sellButton.clipsToBounds = true
         sellButton.layer.cornerRadius = 20
+        sellButton.addTarget(self, action: #selector(sellButtonAction), for: .touchUpInside)
         NSLayoutConstraint.activate([
             sellButton.heightAnchor.constraint(equalToConstant: purchaseStackView.frame.height/2.5),
         ])
@@ -308,5 +309,16 @@ extension StockStatsViewController{
             navigationController?.pushViewController(purchaseViewController, animated: true)
 
         }
+    }
+    
+    @objc
+    func sellButtonAction(sender: UIButton!){
+        let firebaseFunctions = FirebaseFunctions()
+        if let stockPrice = (selectedStock.price){
+            if let floatStockPrice = Float(stockPrice){
+                firebaseFunctions.sellUserStock(tickerSymbol: selectedStockTicker, quantity: 1, stockPrice: floatStockPrice)
+            }// optional bind floatStockPrice
+        }//optional bind of stockPrice
+        
     }
 }
