@@ -86,8 +86,38 @@ struct FirebaseFunctions{
                 }//for loop
             }//optional bind of document
             print("successfully deleted stock")
+            completionHandler(isSuccessful: true)
         }//end of closure
     }//end of function
+    
+    func completionHandler(isSuccessful: Bool) -> Bool{
+        return isSuccessful
+    }
+    
+    
+    
+    
+    func setUserBalanceLabel(labelToUpdate: UILabel){
+        let userDoc = db.collection("Users").document(appDelegate.email)
+        userDoc.getDocument { (document, error) in
+            if let error = error{
+                print(error.localizedDescription)
+                return
+            }
+            if let document = document{
+                guard var userCurrentBalance = document.get("currentBalance") as? Float else{return}
+                print(userCurrentBalance)
+                DispatchQueue.main.async{
+                    labelToUpdate.text = String(userCurrentBalance)
+                    return
+                }//DispatchQueue
+            }//optional bind of document
+        }//getDocument
+        DispatchQueue.main.async{
+            labelToUpdate.text = "-"
+        }
+    }//getUserbalance
+    
     func getUserStock(tickerArray: [String]){
         
     }

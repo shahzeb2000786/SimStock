@@ -14,16 +14,18 @@ class HomeViewController: UIViewController {
     
     private var currentStockPrice: String = ""{
         willSet{
-            DispatchQueue.main.async{
-                self.totalMoneyEarnedLabel.text = self.currentStockPrice
-            }
+//            DispatchQueue.main.async{
+//                self.totalMoneyEarnedLabel.text = self.currentStockPrice
+//            }
         }didSet{}
     
     }
+
     
  
     override func loadView(){
         super.loadView()
+        let firebaseFunctions = FirebaseFunctions()
         Auth.auth().createUser(withEmail: "shahzeb2000786@gmail.com", password: "random") { authResult, error in
             if let error = error {
                 print(error.localizedDescription)
@@ -114,6 +116,9 @@ class HomeViewController: UIViewController {
 
         self.totalMoneyEarnedLabel = totalMoneyEarnedLabel
         self.purchasedStocksTableView = purchasedStocksTableView
+        
+        firebaseFunctions.setUserBalanceLabel(labelToUpdate: self.totalMoneyEarnedLabel)
+
     }
     
     override func viewDidLoad() {
@@ -172,7 +177,6 @@ extension HomeViewController{
             }catch{
                 print ("Error in decoding JSON" + error.localizedDescription)
             }
-            
         }//end of task
         task.resume()
     }//end of getstockData function
@@ -184,8 +188,6 @@ extension HomeViewController{
     func tickerSearchButtonAction(sender: UIButton!){
         let tickerView = TickerSearchViewController()
         navigationController?.pushViewController(tickerView, animated: true)
-           
-//        self.present(tickerView, animated: true, completion: nil)
     }
 }
 
