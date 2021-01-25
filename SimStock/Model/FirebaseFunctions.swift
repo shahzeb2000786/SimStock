@@ -80,7 +80,7 @@ struct FirebaseFunctions{
                         if (currentNumOfStockOwned < quantity){
                             return
                         }
-                        //userCurrentBalance += stockSellAmount
+                        userCurrentBalance += stockSellAmount
                         let updatedQuantity = currentNumOfStockOwned - quantity
                         let updatedSoldStock = ["ticker": tickerSymbol, "quantity": updatedQuantity, "totalAmountPaid": userCurrentBalance] as [String : Any]
                         userDoc.updateData(["stocks." + tickerSymbol : updatedSoldStock, "currentBalance": userCurrentBalance])
