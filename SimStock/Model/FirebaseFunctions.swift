@@ -67,13 +67,15 @@ struct FirebaseFunctions{
                 guard let currentStocks = document.get("stocks") as? NSDictionary else {
                     print(error?.localizedDescription ?? "Could not get stocks as NSdictioanry")
                     return}
+                print("made it past guards")
                 for (tickerKey, stockObject) in currentStocks{
                     guard let tickerKey = tickerKey as? String else{return}
                     if tickerKey == tickerSymbol{
+                        print("There wa a hit")
                         guard let previouslyPurchasedStock = stockObject as? NSDictionary else{ return}
 
                         guard let currentNumOfStockOwned = previouslyPurchasedStock["quantity"] as? Float else{return}
-                        
+                        print("break point")
                         //checks if user tried to purhase more stock than they owned
                         if (currentNumOfStockOwned < quantity){
                             return
@@ -86,13 +88,10 @@ struct FirebaseFunctions{
                 }//for loop
             }//optional bind of document
             print("successfully deleted stock")
-            completionHandler(isSuccessful: true)
         }//end of closure
     }//end of function
     
-    func completionHandler(isSuccessful: Bool) -> Bool{
-        return isSuccessful
-    }
+
     
     
     
@@ -118,8 +117,44 @@ struct FirebaseFunctions{
         }
     }//getUserbalance
     
-    func getUserStock(tickerArray: [String]){
+    
+    
+    
+    
+    
+    
+    
+    
+    mutating func getUsersStock(tickerArrayToSet: [Stock]){
+        let userDoc = db.collection("Users").document(appDelegate.email)
+        var arrayOfStocks = tickerArrayToSet
+        arrayOfStocks.removeAll()
         
-    }
+        userDoc.getDocument { (document, error) in
+            if let error = error{
+                print(error.localizedDescription)
+                return
+            }
+            if let document = document{
+               // let updatedUserBalance = userCurrentBalance - amountDueForPayment//
+                guard let currentStocks = document.get("stocks") as? NSDictionary else {
+                    print(error?.localizedDescription ?? "Could not get stocks as NSdictioanry")
+                    return}
+                
+                for (tickerKey, stockObject) in currentStocks{
+                    var stockToAppend = Stock()
+                    guard let tickerKey = tickerKey as? String else{continue}
+                    guard let stockObject = stockObject as? NSDictionary else{continue}
+                    guard let currentNumOfStockOwned = stockObject["quantity"] as? Float else{continue}
+                    
+                    stockToAppend.ticker = tickerKey
+                    stockToAppend.price = "1000"
+                    arrayOfStocks.append(stockToAppend)
+                }//for loop
+             //   tickerArrayToSet = arrayOfStocks
+            }//optional bind of document
+        }//getDocument closure
+        
+    }//end of function
     
 }

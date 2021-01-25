@@ -116,7 +116,6 @@ class HomeViewController: UIViewController {
 
         self.totalMoneyEarnedLabel = totalMoneyEarnedLabel
         self.purchasedStocksTableView = purchasedStocksTableView
-        
         firebaseFunctions.setUserBalanceLabel(labelToUpdate: self.totalMoneyEarnedLabel)
 
     }

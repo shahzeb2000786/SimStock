@@ -9,12 +9,12 @@ import UIKit
 
 class PurchaseViewController: UIViewController{
     private let numberPad = Bundle.main.loadNibNamed("NumberPad", owner: nil, options: nil)?.first as! NumberPad
-    
     private weak var numberOfSharesLabel: UILabel!
     private weak var sharePriceLabel: UILabel!
     private weak var totalPriceOwedLabel: UILabel!
     private weak var placeOrderButton: UIButton!
     
+    var isPurchaseStockState = true
     var ticker: String = ""
     var sharePrice: Float = 0.00 {
         willSet{
@@ -190,12 +190,14 @@ extension PurchaseViewController{
     
     @objc
     func placeOrderButtonPressed(sender: UIButton!){
-        
         let firebaseFuncs = FirebaseFunctions()
-        if ticker != "" && quantity != 0 && sharePrice != 0{
-            firebaseFuncs.addStockToUser(tickerSymbol: ticker, quantity: quantity, stockPrice: sharePrice)
+        if isPurchaseStockState == true{
+            if ticker != "" && quantity != 0 && sharePrice != 0{
+                firebaseFuncs.addStockToUser(tickerSymbol: ticker, quantity: quantity, stockPrice: sharePrice)
+            }
+        }else{
+            firebaseFuncs.sellUserStock(tickerSymbol: ticker, quantity: quantity, stockPrice: sharePrice)
         }
-        
     }//end of function
 }//end of extension
 

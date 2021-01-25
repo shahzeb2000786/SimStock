@@ -303,8 +303,8 @@ extension StockStatsViewController{
     @objc
     func buyButtonAction(sender: UIButton!){
         let purchaseViewController = PurchaseViewController()
-        purchaseViewController.ticker = selectedStockTicker
         if let floatStockPrice = selectedStock.price{
+            purchaseViewController.ticker = selectedStockTicker
             purchaseViewController.sharePrice = Float(floatStockPrice) ?? 0.00
             navigationController?.pushViewController(purchaseViewController, animated: true)
 
@@ -313,11 +313,16 @@ extension StockStatsViewController{
     
     @objc
     func sellButtonAction(sender: UIButton!){
+        let purchaseViewController = PurchaseViewController()
         let firebaseFunctions = FirebaseFunctions()
-        if let stockPrice = (selectedStock.price){
-            if let floatStockPrice = Float(stockPrice){
-                firebaseFunctions.sellUserStock(tickerSymbol: selectedStockTicker, quantity: 1, stockPrice: floatStockPrice)
-            }// optional bind floatStockPrice
+        if let floatStockPrice = (selectedStock.price){
+            purchaseViewController.ticker = selectedStockTicker
+            purchaseViewController.sharePrice = Float(floatStockPrice) ?? 00
+            purchaseViewController.isPurchaseStockState = false
+            navigationController?.pushViewController(purchaseViewController, animated: true)
+//            if let floatStockPrice = Float(stockPrice){
+//                firebaseFunctions.sellUserStock(tickerSymbol: selectedStockTicker, quantity: 1, stockPrice: floatStockPrice)
+//            }// optional bind floatStockPrice
         }//optional bind of stockPrice
         
     }
