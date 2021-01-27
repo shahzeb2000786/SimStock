@@ -7,7 +7,7 @@
 
 import UIKit
 import Firebase
-class HomeViewController: UIViewController {
+class HomeViewController: UIViewController{
     private let db = Firestore.firestore()
     private let appDelegate = UIApplication.shared.delegate as! AppDelegate
     private weak var purchasedStocksTableView: UITableView!
@@ -70,6 +70,7 @@ class HomeViewController: UIViewController {
         purchasedStocksTableView.translatesAutoresizingMaskIntoConstraints = false
         purchasedStocksTableView.separatorColor = UIColor.gray
         purchasedStocksTableView.dataSource = self
+        purchasedStocksTableView.delegate = self
         purchasedStocksTableView.register(UITableViewCell.self, forCellReuseIdentifier: "stockCell")
         purchasedStocksTableView.backgroundColor = UIColor.black
        // purchasedStocksTableView.tableHeaderView = UITableViewHeaderFooterView(
@@ -139,6 +140,19 @@ class HomeViewController: UIViewController {
 
 }
 
+//extension for tableview delegate
+extension HomeViewController: UITableViewDelegate{
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 100
+    }
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let selectedTickerSymbol = self.listOfUserStocks[indexPath.row].ticker
+        let stockStatsViewController = StockStatsViewController()
+        stockStatsViewController.selectedStockTicker = selectedTickerSymbol ?? "MSFT"
+        self.navigationController?.pushViewController(stockStatsViewController, animated: true)
+    }
+}
+//extension for tableview datasource
 extension HomeViewController: UITableViewDataSource{
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         listOfUserStocks.count
