@@ -8,10 +8,11 @@
 import UIKit
 import Firebase
 class HomeViewController: UIViewController {
-    
+    private let db = Firestore.firestore()
+    private let appDelegate = UIApplication.shared.delegate as! AppDelegate
     private weak var purchasedStocksTableView: UITableView!
     private weak var totalMoneyEarnedLabel: UILabel!
-    
+
     private var currentStockPrice: String = ""{
         willSet{
 //            DispatchQueue.main.async{
@@ -21,7 +22,14 @@ class HomeViewController: UIViewController {
     
     }
 
-    
+    private var listOfUserStocks: [Stock] = [Stock()]{
+        willSet{
+            DispatchQueue.main.async{
+                self.purchasedStocksTableView.reloadData()
+            }
+        }
+        didSet{}
+    }
  
     override func loadView(){
         super.loadView()
@@ -121,6 +129,7 @@ class HomeViewController: UIViewController {
     }
     
     override func viewDidLoad() {
+        getUsersStock()
         super.viewDidLoad()
         navigationItem.hidesBackButton = false
         //getStockData(ticker: "ibm")
@@ -132,20 +141,26 @@ class HomeViewController: UIViewController {
 
 extension HomeViewController: UITableViewDataSource{
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 15
+        listOfUserStocks.count
     }
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let currentStock = self.listOfUserStocks[indexPath.row]
         let cell = purchasedStocksTableView.dequeueReusableCell(withIdentifier: "StockInfoCell") as! StockInfoCell
+        cell.amountGrownLabel.font = UIFont(name: cell.amountGrownLabel.font.fontName, size: 25)
+        cell.amountGrownLabel.textColor = UIColor.white
+        
         if indexPath.row == 0{
             print(indexPath.row)
             cell.tickerLabel.text = "Ticker"
             cell.stockValueLabel.text = "Price"
             cell.quantityLabel.text = "Qty"
             cell.amountGrownLabel.text = "↑↓"
-            cell.amountGrownLabel.font = UIFont(name: cell.amountGrownLabel.font.fontName, size: 25)
-            cell.amountGrownLabel.textColor = UIColor.white
            // cell.growthImageView.image
-            
+        }else{
+            cell.tickerLabel.text = currentStock.ticker
+            cell.stockValueLabel.text = currentStock.price
+            cell.quantityLabel.text = "1"
+            cell.amountGrownLabel.text = "↑↓"
         }
         cell.awakeFromNib()
         return cell
@@ -190,3 +205,37 @@ extension HomeViewController{
     }
 }
 
+//extension to handle firebase calls
+extension HomeViewController{
+    func getUsersStock(){
+        let userDoc = db.collection("Users").document(appDelegate.email)
+        var arrayOfStocks: [Stock] = []
+        
+        userDoc.getDocument { (document, error) in
+            if let error = error{
+                print(error.localizedDescription)
+                return
+            }
+            if let document = document{
+               // let updatedUserBalance = userCurrentBalance - amountDueForPayment//
+                guard let currentStocks = document.get("stocks") as? NSDictionary else {
+                    print(error?.localizedDescription ?? "Could not get stocks as NSdictioanry")
+                    return}
+                
+                for (tickerKey, stockObject) in currentStocks{
+                    var stockToAppend = Stock()
+                    guard let tickerKey = tickerKey as? String else{continue}
+                    guard let stockObject = stockObject as? NSDictionary else{continue}
+                    guard let currentNumOfStockOwned = stockObject["quantity"] as? Float else{continue}
+                    
+                    stockToAppend.ticker = tickerKey
+                    stockToAppend.price = "1000"
+                    arrayOfStocks.append(stockToAppend)
+                }//for loop
+                self.listOfUserStocks = arrayOfStocks
+             //   tickerArrayToSet = arrayOfStocks
+            }//optional bind of document
+        }//getDocument closure
+        
+    }//end of function
+}

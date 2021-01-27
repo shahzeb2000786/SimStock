@@ -19,7 +19,7 @@ class PurchaseViewController: UIViewController{
     var sharePrice: Float = 0.00 {
         willSet{
             DispatchQueue.main.async{
-                    self.sharePriceLabel.text = String(self.sharePrice) 
+                    self.sharePriceLabel?.text = String(self.sharePrice)
 
             }//DispatchQueue
         }//willSet
