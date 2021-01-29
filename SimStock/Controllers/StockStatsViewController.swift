@@ -37,7 +37,7 @@ class StockStatsViewController: UIViewController, UINavigationControllerDelegate
             DispatchQueue.main.async{
                 var increment = 0.0
                 for stock in self.selectedStockArray{
-                    let entry = ChartDataEntry(x: increment, y: Double(stock.price!) ?? 0.0)
+                    let entry = ChartDataEntry(x: increment, y: Double(stock.price!) ?? 10.00)
                     self.yValues.append(entry)
                     increment += 1
                 }
@@ -286,6 +286,7 @@ extension StockStatsViewController: ChartViewDelegate{
         //lineChartView.lineData?.entryForHighlight(highlight)
         let selectedPriceAtDate = (selectedStockArray[indexOfEntry!].price)
         selectedStockPrice = selectedPriceAtDate!
+        print(selectedStockPrice)
     }
     
     func setData() {

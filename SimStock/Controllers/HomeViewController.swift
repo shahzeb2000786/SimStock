@@ -18,17 +18,18 @@ class HomeViewController: UIViewController{
 //            DispatchQueue.main.async{
 //                self.totalMoneyEarnedLabel.text = self.currentStockPrice
 //            }
-        }didSet{}
-    
+        }
     }
-
-    private var listOfUserStocks: [Stock] = [Stock()]{
+    
+    private var stockToPutIntoList: Stock = Stock()
+       
+    //the initial stock put into the listOfUserStocks will set the title columns for tableview
+    private var listOfUserStocks: [Stock] = [Stock(ticker: "Ticker", price: "Price",  change: "↑↓" )]{
         willSet{
             DispatchQueue.main.async{
                 self.purchasedStocksTableView.reloadData()
             }
         }
-        didSet{}
     }
  
     override func loadView(){
@@ -158,24 +159,15 @@ extension HomeViewController: UITableViewDataSource{
         listOfUserStocks.count
     }
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let currentStock = self.listOfUserStocks[indexPath.row]
         let cell = purchasedStocksTableView.dequeueReusableCell(withIdentifier: "StockInfoCell") as! StockInfoCell
         cell.amountGrownLabel.font = UIFont(name: cell.amountGrownLabel.font.fontName, size: 25)
         cell.amountGrownLabel.textColor = UIColor.white
-        
-        if indexPath.row == 0{
-            print(indexPath.row)
-            cell.tickerLabel.text = "Ticker"
-            cell.stockValueLabel.text = "Price"
-            cell.quantityLabel.text = "Qty"
-            cell.amountGrownLabel.text = "↑↓"
-           // cell.growthImageView.image
-        }else{
+            let currentStock = self.listOfUserStocks[indexPath.row]
             cell.tickerLabel.text = currentStock.ticker
             cell.stockValueLabel.text = currentStock.price
             cell.quantityLabel.text = "1"
-            cell.amountGrownLabel.text = "↑↓"
-        }
+            cell.amountGrownLabel.text = currentStock.change
+       // }
         cell.awakeFromNib()
         return cell
     }
@@ -184,7 +176,7 @@ extension HomeViewController: UITableViewDataSource{
 //extension for URL requests
 extension HomeViewController{
     func getStockData(ticker: String){
-        let urlString = "http://localhost:3000/current/ibm"
+        let urlString = "http://localhost:3000/current/" + ticker
         
         let url = URL(string: urlString)!
         let task = URLSession.shared.dataTask(with: url) { (data, response, error) in
@@ -201,7 +193,9 @@ extension HomeViewController{
             do{
                 let decoder = JSONDecoder()
                 let stockData = try decoder.decode(Stock.self, from: data!)
-                self.currentStockPrice = stockData.high!
+                self.listOfUserStocks.append(stockData)
+               
+ 
             }catch{
                 print ("Error in decoding JSON" + error.localizedDescription)
             }
@@ -237,19 +231,17 @@ extension HomeViewController{
                     return}
                 
                 for (tickerKey, stockObject) in currentStocks{
-                    var stockToAppend = Stock()
                     guard let tickerKey = tickerKey as? String else{continue}
                     guard let stockObject = stockObject as? NSDictionary else{continue}
                     guard let currentNumOfStockOwned = stockObject["quantity"] as? Float else{continue}
+                    self.stockToPutIntoList.ticker = tickerKey
+                    if let ticker = self.stockToPutIntoList.ticker {
+                        self.getStockData(ticker: ticker)
+                    }
                     
-                    stockToAppend.ticker = tickerKey
-                    stockToAppend.price = "1000"
-                    arrayOfStocks.append(stockToAppend)
                 }//for loop
-                self.listOfUserStocks = arrayOfStocks
-             //   tickerArrayToSet = arrayOfStocks
+
             }//optional bind of document
         }//getDocument closure
-        
     }//end of function
 }
