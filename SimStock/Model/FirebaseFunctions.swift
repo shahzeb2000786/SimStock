@@ -112,7 +112,7 @@ struct FirebaseFunctions{
         DispatchQueue.main.async{
             labelToUpdate.text = "-"
         }
-    }//getUserbalance
+    }
     
     
     

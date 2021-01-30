@@ -11,15 +11,16 @@ class HomeViewController: UIViewController{
     private let db = Firestore.firestore()
     private let appDelegate = UIApplication.shared.delegate as! AppDelegate
     private weak var purchasedStocksTableView: UITableView!
-    private weak var totalMoneyEarnedLabel: UILabel!
+    private weak var totalUserEquityLabel: UILabel!
 
-    private var currentStockPrice: String = ""{
+    
+    private var totalUserEquity: Float = 0.00 {
         willSet{
-//            DispatchQueue.main.async{
-//                self.totalMoneyEarnedLabel.text = self.currentStockPrice
-//            }
-        }
-    }
+            DispatchQueue.main.async{
+                self.totalUserEquityLabel.text = String(self.totalUserEquity)
+            }//dispatchqueue
+        }//willSet
+    }//end of observed property
     
     private var stockToPutIntoList: Stock = Stock()
        
@@ -28,9 +29,9 @@ class HomeViewController: UIViewController{
         willSet{
             DispatchQueue.main.async{
                 self.purchasedStocksTableView.reloadData()
-            }
-        }
-    }
+            }//dispatchqueue
+        }//willSet
+    }//end of observed property
  
     override func loadView(){
         super.loadView()
@@ -49,13 +50,13 @@ class HomeViewController: UIViewController{
         tickerSearchButton?.addTarget(self, action: #selector (tickerSearchButtonAction), for: .touchUpInside)
         let purchasedStocksTableView = UITableView(frame: .zero)
         let amountOfUserStockGrowthLabel = UILabel()
-        let totalMoneyEarnedLabel = UILabel()
+        let totalUserEquityLabel = UILabel()
         let tickerSearchBar = UISearchBar()
         
         //adding ui elements to main view
         self.view.addSubview(bottomBar)
         self.view.addSubview((purchasedStocksTableView))
-        self.view.addSubview(totalMoneyEarnedLabel)
+        self.view.addSubview(totalUserEquityLabel)
         self.view.addSubview(amountOfUserStockGrowthLabel)
         self.view.addSubview(tickerSearchBar)
         
@@ -98,19 +99,19 @@ class HomeViewController: UIViewController{
 
 
         //totalMoneyEarnedLabel
-        totalMoneyEarnedLabel.textAlignment = .center
-        totalMoneyEarnedLabel.font = UIFont(name: totalMoneyEarnedLabel.font.fontName, size: 50)
-        totalMoneyEarnedLabel.minimumScaleFactor = 0.5
-        totalMoneyEarnedLabel.adjustsFontSizeToFitWidth = true
-        totalMoneyEarnedLabel.text = "$10000.00"
-        totalMoneyEarnedLabel.backgroundColor = UIColor.clear
-        totalMoneyEarnedLabel.textColor = UIColor.white
-        totalMoneyEarnedLabel.translatesAutoresizingMaskIntoConstraints = false
+        totalUserEquityLabel.textAlignment = .center
+        totalUserEquityLabel.font = UIFont(name: totalUserEquityLabel.font.fontName, size: 50)
+        totalUserEquityLabel.minimumScaleFactor = 0.5
+        totalUserEquityLabel.adjustsFontSizeToFitWidth = true
+        totalUserEquityLabel.text = "$10000.00"
+        totalUserEquityLabel.backgroundColor = UIColor.clear
+        totalUserEquityLabel.textColor = UIColor.white
+        totalUserEquityLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            totalMoneyEarnedLabel.widthAnchor.constraint(equalToConstant: self.view.frame.width/1.5),
-            totalMoneyEarnedLabel.heightAnchor.constraint(equalToConstant: self.view.frame.height/11),
-            totalMoneyEarnedLabel.bottomAnchor.constraint(equalTo: amountOfUserStockGrowthLabel.topAnchor),
-            totalMoneyEarnedLabel.centerXAnchor.constraint(equalTo: self.view.centerXAnchor)
+            totalUserEquityLabel.widthAnchor.constraint(equalToConstant: self.view.frame.width/1.5),
+            totalUserEquityLabel.heightAnchor.constraint(equalToConstant: self.view.frame.height/11),
+            totalUserEquityLabel.bottomAnchor.constraint(equalTo: amountOfUserStockGrowthLabel.topAnchor),
+            totalUserEquityLabel.centerXAnchor.constraint(equalTo: self.view.centerXAnchor)
         ])
         
         tickerSearchBar.placeholder = "Enter ticker symbol"
@@ -124,9 +125,9 @@ class HomeViewController: UIViewController{
         ])
         print(self.view.safeAreaInsets.top)
 
-        self.totalMoneyEarnedLabel = totalMoneyEarnedLabel
+        self.totalUserEquityLabel = totalUserEquityLabel
         self.purchasedStocksTableView = purchasedStocksTableView
-        firebaseFunctions.setUserBalanceLabel(labelToUpdate: self.totalMoneyEarnedLabel)
+        firebaseFunctions.setUserBalanceLabel(labelToUpdate: self.totalUserEquityLabel)
 
     }
     
@@ -147,12 +148,17 @@ extension HomeViewController: UITableViewDelegate{
         return 100
     }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let selectedTickerSymbol = self.listOfUserStocks[indexPath.row].ticker
-        let stockStatsViewController = StockStatsViewController()
-        stockStatsViewController.selectedStockTicker = selectedTickerSymbol ?? "MSFT"
-        self.navigationController?.pushViewController(stockStatsViewController, animated: true)
-    }
-}
+        //if statement only executes if the title screen cell for the tableview is not clicked
+        if indexPath.row != 0{
+            let selectedTickerSymbol = self.listOfUserStocks[indexPath.row].ticker
+            let stockStatsViewController = StockStatsViewController()
+            stockStatsViewController.selectedStockTicker = selectedTickerSymbol ?? "MSFT"
+            self.navigationController?.pushViewController(stockStatsViewController, animated: true)
+        }//if
+       
+    }//end of function
+}//end of extension
+
 //extension for tableview datasource
 extension HomeViewController: UITableViewDataSource{
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -173,9 +179,17 @@ extension HomeViewController: UITableViewDataSource{
     }
 }
 
+//extension to handle button actions
+extension HomeViewController{
+    @objc
+    func tickerSearchButtonAction(sender: UIButton!){
+        let tickerView = TickerSearchViewController()
+        navigationController?.pushViewController(tickerView, animated: true)
+    }
+}
 //extension for URL requests
 extension HomeViewController{
-    func getStockData(ticker: String){
+    func getStockData(ticker: String, quantityOfStockOwned: Float){
         let urlString = "http://localhost:3000/current/" + ticker
         
         let url = URL(string: urlString)!
@@ -193,9 +207,16 @@ extension HomeViewController{
             do{
                 let decoder = JSONDecoder()
                 let stockData = try decoder.decode(Stock.self, from: data!)
-                self.listOfUserStocks.append(stockData)
-               
- 
+                
+                if let stockPrice = (stockData.price) {
+                    if let floatStockPrice = Float(stockPrice){
+                        DispatchQueue.main.async{
+                            self.totalUserEquity += floatStockPrice * quantityOfStockOwned
+                        }
+                    }//inner optional bind floatStockPrice
+                    self.listOfUserStocks.append(stockData)//only appends stock if it has a price
+                }//outer optional bind of stockPrice
+    
             }catch{
                 print ("Error in decoding JSON" + error.localizedDescription)
             }
@@ -203,22 +224,10 @@ extension HomeViewController{
         task.resume()
     }//end of getstockData function
 }
-
-//extension to handle button actions
-extension HomeViewController{
-    @objc
-    func tickerSearchButtonAction(sender: UIButton!){
-        let tickerView = TickerSearchViewController()
-        navigationController?.pushViewController(tickerView, animated: true)
-    }
-}
-
 //extension to handle firebase calls
 extension HomeViewController{
     func getUsersStock(){
         let userDoc = db.collection("Users").document(appDelegate.email)
-        var arrayOfStocks: [Stock] = []
-        
         userDoc.getDocument { (document, error) in
             if let error = error{
                 print(error.localizedDescription)
@@ -226,21 +235,23 @@ extension HomeViewController{
             }
             if let document = document{
                // let updatedUserBalance = userCurrentBalance - amountDueForPayment//
+                guard var userCurrentBalance = document.get("currentBalance") as? Float else{return}
                 guard let currentStocks = document.get("stocks") as? NSDictionary else {
                     print(error?.localizedDescription ?? "Could not get stocks as NSdictioanry")
                     return}
                 
+                DispatchQueue.main.async{
+                    self.totalUserEquity = userCurrentBalance
+                }
                 for (tickerKey, stockObject) in currentStocks{
                     guard let tickerKey = tickerKey as? String else{continue}
                     guard let stockObject = stockObject as? NSDictionary else{continue}
-                    guard let currentNumOfStockOwned = stockObject["quantity"] as? Float else{continue}
+                    guard let quantityOfStockOwned = stockObject["quantity"] as? Float else{continue}
                     self.stockToPutIntoList.ticker = tickerKey
                     if let ticker = self.stockToPutIntoList.ticker {
-                        self.getStockData(ticker: ticker)
+                        self.getStockData(ticker: ticker, quantityOfStockOwned: quantityOfStockOwned)
                     }
-                    
                 }//for loop
-
             }//optional bind of document
         }//getDocument closure
     }//end of function
