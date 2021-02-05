@@ -21,9 +21,7 @@ class HomeViewController: UIViewController{
             }//dispatchqueue
         }//willSet
     }//end of observed property
-    
-    private var stockToPutIntoList: Stock = Stock()
-       
+           
     //the initial stock put into the listOfUserStocks will set the title columns for tableview
     private var listOfUserStocks: [Stock] = [Stock(ticker: "Ticker", price: "Price",  change: "↑↓" )]{
         willSet{
@@ -191,14 +189,12 @@ extension HomeViewController{
 extension HomeViewController{
     func getStockData(ticker: String, quantityOfStockOwned: Float){
         let urlString = "http://localhost:3000/current/" + ticker
-        
         let url = URL(string: urlString)!
         let task = URLSession.shared.dataTask(with: url) { (data, response, error) in
             if error != nil || data == nil{
                 print(error?.localizedDescription)
                 print("There was an error in retreiving information from the Alpha Vantage Api")
                 fatalError("There was an error in retreiving information from the Alpha Vantage Api")
-                
             }
             guard let response = response as? HTTPURLResponse, (200...299).contains(response.statusCode)else{
                 print("Error in server")
@@ -210,9 +206,13 @@ extension HomeViewController{
                 
                 if let stockPrice = (stockData.price) {
                     if let floatStockPrice = Float(stockPrice){
-                        DispatchQueue.main.async{
-                            self.totalUserEquity += floatStockPrice * quantityOfStockOwned
-                        }
+                        let totalStockValueOwned = floatStockPrice * quantityOfStockOwned
+                        print("----------------------------")
+                        print(ticker)
+                        print(stockData.ticker)
+                        print(quantityOfStockOwned)
+                        print("----------------------------")
+                        self.totalUserEquity += totalStockValueOwned
                     }//inner optional bind floatStockPrice
                     self.listOfUserStocks.append(stockData)//only appends stock if it has a price
                 }//outer optional bind of stockPrice
@@ -239,18 +239,14 @@ extension HomeViewController{
                 guard let currentStocks = document.get("stocks") as? NSDictionary else {
                     print(error?.localizedDescription ?? "Could not get stocks as NSdictioanry")
                     return}
-                
-                DispatchQueue.main.async{
-                    self.totalUserEquity = userCurrentBalance
-                }
+                self.totalUserEquity = userCurrentBalance
                 for (tickerKey, stockObject) in currentStocks{
                     guard let tickerKey = tickerKey as? String else{continue}
+                    print(tickerKey)
                     guard let stockObject = stockObject as? NSDictionary else{continue}
                     guard let quantityOfStockOwned = stockObject["quantity"] as? Float else{continue}
-                    self.stockToPutIntoList.ticker = tickerKey
-                    if let ticker = self.stockToPutIntoList.ticker {
-                        self.getStockData(ticker: ticker, quantityOfStockOwned: quantityOfStockOwned)
-                    }
+                    
+                    self.getStockData(ticker: tickerKey, quantityOfStockOwned: quantityOfStockOwned)
                 }//for loop
             }//optional bind of document
         }//getDocument closure

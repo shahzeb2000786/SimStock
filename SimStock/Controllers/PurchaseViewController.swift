@@ -195,10 +195,30 @@ extension PurchaseViewController{
             if ticker != "" && quantity != 0 && sharePrice != 0{
                 firebaseFuncs.addStockToUser(tickerSymbol: ticker, quantity: quantity, stockPrice: sharePrice)
             }
+           
+            showSimpleAlert(isPurchaseSuccesful: true)
         }else{
             firebaseFuncs.sellUserStock(tickerSymbol: ticker, quantity: quantity, stockPrice: sharePrice)
         }
     }//end of function
+    
+    func showSimpleAlert(isPurchaseSuccesful: Bool) {
+        let alert = UIAlertController(title: "", message: "",preferredStyle: UIAlertController.Style.alert)
+        alert.addAction(UIAlertAction(title: "Cancel", style: UIAlertAction.Style.cancel, handler: { _ in
+            }))
+        if isPurchaseSuccesful == true{
+            alert.message = "Stock has been purchased"
+            alert.title = "Success"
+        }else{
+            alert.message = "Could not purchase stock, possibily not enough savings"
+            alert.message = "Error"
+        }
+            self.present(alert, animated: true, completion: nil)
+    }//end of function
+      
+       
+
+       
 }//end of extension
 
 

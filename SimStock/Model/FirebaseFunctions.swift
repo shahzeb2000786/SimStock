@@ -24,6 +24,11 @@ struct FirebaseFunctions{
                 guard var userCurrentBalance = document.get("currentBalance") as? Float else{return}
                 let amountDueForPayment = quantity * stockPrice
                 let updatedUserBalance = userCurrentBalance - amountDueForPayment
+                
+                if updatedUserBalance < 0{
+                    print("Not enough funds to purchase stock")
+                    return
+                }
                 guard let currentStocks = document.get("stocks") as? NSDictionary else {
                     print(error?.localizedDescription)
                     return}
