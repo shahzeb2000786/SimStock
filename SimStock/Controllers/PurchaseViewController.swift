@@ -196,7 +196,7 @@ extension PurchaseViewController{
                 addStockToUser(tickerSymbol: ticker, quantity: quantity, stockPrice: sharePrice)
             }
         }else{
-            firebaseFuncs.sellUserStock(tickerSymbol: ticker, quantity: quantity, stockPrice: sharePrice)
+           sellUserStock(tickerSymbol: ticker, quantity: quantity, stockPrice: sharePrice)
         }
     }//end of function
 }//end of extension
@@ -205,66 +205,117 @@ extension PurchaseViewController{
 //extension to deal with firebase functions
 extension PurchaseViewController{
     func addStockToUser(tickerSymbol: String, quantity: Float, stockPrice: Float) {
-        print("function started")
         let db = Firestore.firestore()
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
         let userDoc = db.collection("Users").document(appDelegate.email)
         userDoc.getDocument { (document, error) in
             if let error = error{
                 print(error.localizedDescription)
-                self.showSimpleAlert(isPurchaseSuccesful: false, message: "Doc retrieval failed")
+                self.showSimpleAlert(isTransactionSuccesful: false, message: "Doc retrieval failed")
                 return
             }//optional bind of error
             if let document = document{
                 guard var userCurrentBalance = document.get("currentBalance") as? Float else{
-                    self.showSimpleAlert(isPurchaseSuccesful: false, message: "Could not get current balance")
+                    self.showSimpleAlert(isTransactionSuccesful: false, message: "Could not get current balance")
                     return}
                 let amountDueForPayment = quantity * stockPrice
                 let updatedUserBalance = userCurrentBalance - amountDueForPayment
                 
                 if updatedUserBalance < 0{
                     print("Not enough funds to purchase stock")
-                    self.showSimpleAlert(isPurchaseSuccesful: false, message: "Not enough funds to purchase stock")
+                    self.showSimpleAlert(isTransactionSuccesful: false, message: "Not enough funds to purchase stock")
                     return
                 }
                 guard let currentStocks = document.get("stocks") as? NSDictionary else {
                     print(error?.localizedDescription)
-                    self.showSimpleAlert(isPurchaseSuccesful: false, message: "Could not retrieve your list of stocks")
+                    self.showSimpleAlert(isTransactionSuccesful: false, message: "Could not retrieve your list of stocks")
                     return}
                 for (tickerKey, stockObject) in currentStocks{
-                    guard let tickerKey = tickerKey as? String else{return}
+                    guard let tickerKey = tickerKey as? String else{continue}
                     print (tickerKey == tickerSymbol)
                     if  tickerKey == tickerSymbol{
-                        guard let stockObject = stockObject as? NSDictionary else{
-                            print("Could not convert stock object")
+                        guard let previouslyPurchasedStock = stockObject as? NSDictionary else{
+                            self.showSimpleAlert(isTransactionSuccesful: false, message: "Could not retrieve your previously purchased stock info as dictionary")
                             return}
-                        guard let previouslyPurchasedStock = stockObject as? NSDictionary else{ return}
-                        guard var totalSpentOnStock = previouslyPurchasedStock["totalAmountPaid"] as? Float else{return}
-                        guard var currentNumOfStockOwned = previouslyPurchasedStock["quantity"] as? Float else{return}
+                        guard var totalSpentOnStock = previouslyPurchasedStock["totalAmountPaid"] as? Float else{
+                            self.showSimpleAlert(isTransactionSuccesful: false, message: "Could not retrieve total money you spent on stock")
+                            return}
+                        guard var currentNumOfStockOwned = previouslyPurchasedStock["quantity"] as? Float else{
+                            self.showSimpleAlert(isTransactionSuccesful: false, message: "Could not retrieve total amount of stock you own")
+                            return}
                         totalSpentOnStock += amountDueForPayment
                         currentNumOfStockOwned += quantity
                         print(currentNumOfStockOwned)
                         let stockToAdd = ["ticker": tickerSymbol, "quantity": currentNumOfStockOwned, "totalAmountPaid": totalSpentOnStock] as [String : Any]
                         userDoc.updateData(["stocks." + tickerSymbol : stockToAdd, "currentBalance": updatedUserBalance])
-                        self.showSimpleAlert(isPurchaseSuccesful: true, message: "")
+                        self.showSimpleAlert(isTransactionSuccesful: true, message: "")
                         return
                     }//end of if statement
                 }//end of for loop
                 let stockToAdd = ["ticker": tickerSymbol, "quantity": quantity, "totalAmountPaid": amountDueForPayment] as [String : Any]
                 userDoc.updateData(["stocks." + tickerSymbol : stockToAdd, "currentBalance": updatedUserBalance])
-                self.showSimpleAlert(isPurchaseSuccesful: true, message: "")
+                self.showSimpleAlert(isTransactionSuccesful: true, message: "Stock has been purchased")
             }//optional bind of document
             print("successfully added stock")
         }//end of closure
         
     }//end of addStockToUser function
     
-    func showSimpleAlert(isPurchaseSuccesful: Bool, message: String) {
+    
+    func sellUserStock(tickerSymbol: String, quantity: Float, stockPrice: Float){
+        let db = Firestore.firestore()
+        let appDelegate = UIApplication.shared.delegate as! AppDelegate
+        let userDoc = db.collection("Users").document(appDelegate.email)
+        let stockSellAmount = quantity * stockPrice
+        userDoc.getDocument { (document, error) in
+            if let error = error{
+                print(error.localizedDescription)
+                self.showSimpleAlert(isTransactionSuccesful: false, message: "Doc retrieval failed")
+                return
+            }
+            if let document = document{
+                guard var userCurrentBalance = document.get("currentBalance") as? Float else{
+                    self.showSimpleAlert(isTransactionSuccesful: false, message: "Could not get current balance")
+                    return}
+               // let updatedUserBalance = userCurrentBalance - amountDueForPayment//
+                guard let currentStocks = document.get("stocks") as? NSDictionary else {
+                    print(error?.localizedDescription ?? "Could not get stocks as NSdictioanry")
+                    self.showSimpleAlert(isTransactionSuccesful: false, message: "Could not retrieve your list of stocks")
+                    return}
+                for (tickerKey, stockObject) in currentStocks{
+                    guard let tickerKey = tickerKey as? String else{return}
+                    if tickerKey == tickerSymbol{
+                        
+                        guard let previouslyPurchasedStock = stockObject as? NSDictionary else{
+                            self.showSimpleAlert(isTransactionSuccesful: false, message: "Could not retrieve your previously purchased stock info as dictionary")
+                            return}
+
+                        guard let currentNumOfStockOwned = previouslyPurchasedStock["quantity"] as? Float else{
+                            self.showSimpleAlert(isTransactionSuccesful: false, message: "Could not retrieve total amount of stock you own")
+                            return}
+                        //checks if user tried to purhase more stock than they owned
+                        if (currentNumOfStockOwned < quantity){
+                            self.showSimpleAlert(isTransactionSuccesful: false, message: "You have insufficient amount of stock to make this sale")
+                            return
+                        }
+                        userCurrentBalance += stockSellAmount
+                        let updatedQuantity = currentNumOfStockOwned - quantity
+                        let updatedSoldStock = ["ticker": tickerSymbol, "quantity": updatedQuantity, "totalAmountPaid": userCurrentBalance] as [String : Any]
+                        userDoc.updateData(["stocks." + tickerSymbol : updatedSoldStock, "currentBalance": userCurrentBalance])
+                        self.showSimpleAlert(isTransactionSuccesful: true, message: "Successfully sold " + String(quantity) + " of " + tickerSymbol + " stock")
+                    }
+                }//for loop
+            }//optional bind of document
+            print("successfully deleted stock")
+        }//end of closure
+    }//end of function
+    
+    func showSimpleAlert(isTransactionSuccesful: Bool, message: String) {
         let alert = UIAlertController(title: "", message: "",preferredStyle: UIAlertController.Style.alert)
         let alertAction = UIAlertAction(title: "Cancel", style: UIAlertAction.Style.cancel, handler: nil)
         alert.addAction(alertAction)
-        if isPurchaseSuccesful == true{
-            alert.message = "Stock has been purchased"
+        if isTransactionSuccesful == true{
+            alert.message = message
             alert.title = "Success"
         }else{
             alert.message = message
