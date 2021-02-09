@@ -7,6 +7,7 @@
 import Foundation
 import UIKit
 import Charts
+import FirebaseFirestore
 class StockStatsViewController: UIViewController, UINavigationControllerDelegate{
     
     lazy var lineChartView: LineChartView = {
@@ -229,7 +230,6 @@ extension StockStatsViewController{
                 print(error?.localizedDescription)
                 print("There was an error in retreiving information from the Alpha Vantage Api")
                 fatalError("There was an error in retreiving information from the Alpha Vantage Api")
-                
             }
             guard let response = response as? HTTPURLResponse, (200...299).contains(response.statusCode)else{
                 print("Error in server")
@@ -239,8 +239,6 @@ extension StockStatsViewController{
                 print(data)
                 let decoder = JSONDecoder()
                 let stockData = try decoder.decode(Stock.self, from: data!)
-                print(stockData)
-                print(ticker)
                 self.selectedStock = stockData
             }catch{
                 print ("Error in decoding JSON" + error.localizedDescription)
@@ -314,17 +312,73 @@ extension StockStatsViewController{
     
     @objc
     func sellButtonAction(sender: UIButton!){
+        
+        canUserSellStock(tickerSymbol: selectedStockTicker)
+    }
+    
+}
+
+extension StockStatsViewController{
+    func showPurchaseScreen(){
         let purchaseViewController = PurchaseViewController()
-        let firebaseFunctions = FirebaseFunctions()
         if let floatStockPrice = (selectedStock.price){
             purchaseViewController.ticker = selectedStockTicker
             purchaseViewController.sharePrice = Float(floatStockPrice) ?? 00
             purchaseViewController.isPurchaseStockState = false
             navigationController?.pushViewController(purchaseViewController, animated: true)
-//            if let floatStockPrice = Float(stockPrice){
-//                firebaseFunctions.sellUserStock(tickerSymbol: selectedStockTicker, quantity: 1, stockPrice: floatStockPrice)
-//            }// optional bind floatStockPrice
         }//optional bind of stockPrice
-        
-    }
-}
+    }//end of function
+    
+    func canUserSellStock(tickerSymbol: String){
+        userStockAlertMessage(errorMessage: "whaddup")
+        return
+        let db = Firestore.firestore()
+        let appDelegate = UIApplication.shared.delegate as! AppDelegate
+        let userDoc = db.collection("Users").document(appDelegate.email)
+        userDoc.getDocument { (document, error) in
+            if let error = error{
+                print(error.localizedDescription)
+                self.userStockAlertMessage(errorMessage: "There was an error in retrieving your account data")
+            }
+            if let document = document{
+               // let updatedUserBalance = userCurrentBalance - amountDueForPayment//
+                guard let currentStocks = document.get("stocks") as? NSDictionary else {
+                    print(error?.localizedDescription ?? "Could not get stocks as NSdictioanry")
+                    self.userStockAlertMessage(errorMessage: "There was an error in retrieving the list of stocks you own")
+                    return}
+                for (tickerKey, stockObject) in currentStocks{
+                    guard let tickerKey = tickerKey as? String else{return}
+                    if tickerKey == tickerSymbol{
+                        print("HIIIIIIIIIIIIIIIIIIIT")
+                        guard let previouslyPurchasedStock = stockObject as? NSDictionary else{
+                            self.userStockAlertMessage(errorMessage: "There was an error in retrieving this stock's information from you transaction history")
+                            return}
+
+                        guard let currentNumOfStockOwned = previouslyPurchasedStock["quantity"] as? Float else{
+                            self.userStockAlertMessage(errorMessage: "There was an error in retrieving the quantity of shares you own of this stock")
+                            return}
+                        //checks if user has enough stock to sell
+                        if (currentNumOfStockOwned <= 0){
+                            self.userStockAlertMessage(errorMessage: "You have no shares of this stock to sell")
+                            return
+                        }
+                        self.showPurchaseScreen()
+                    }
+                }//for loop
+                self.userStockAlertMessage(errorMessage: "You have no shares of this stock to sell")
+            }//optional bind of document
+        }//end of closure
+    }//end of function
+    
+    func userStockAlertMessage(errorMessage: String?){
+        let alert = UIAlertController(title: "", message: "", preferredStyle: .alert)
+        let alertAction = UIAlertAction(title: "", style: .cancel, handler: nil)
+        alert.addAction(alertAction)
+        if let errorMessage = errorMessage{
+            alert.title = "Error"
+            alert.message = errorMessage
+            alert.present(alert, animated: false, completion: nil)
+        }
+    }//end of function
+    
+}//end of view controller class

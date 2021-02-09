@@ -311,8 +311,8 @@ extension PurchaseViewController{
     }//end of function
     
     func showSimpleAlert(isTransactionSuccesful: Bool, message: String) {
-        let alert = UIAlertController(title: "", message: "",preferredStyle: UIAlertController.Style.alert)
-        let alertAction = UIAlertAction(title: "Cancel", style: UIAlertAction.Style.cancel, handler: nil)
+        let alert = UIAlertController(title: "", message: "",preferredStyle: .alert)
+        let alertAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
         alert.addAction(alertAction)
         if isTransactionSuccesful == true{
             alert.message = message
