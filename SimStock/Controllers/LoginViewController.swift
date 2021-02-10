@@ -30,9 +30,7 @@ class LoginViewController: UIViewController, GIDSignInDelegate{
     func sign(_ signIn: GIDSignIn!, didSignInFor user: GIDGoogleUser!, withError error: Error!) {
         let db = Firestore.firestore()
          if let error = error {
-            print("banana potato apple")
             print(error.localizedDescription)
-            print("banana potato apple")
          }
          print("successful sign in")
          guard let authentication = user.authentication else { return }

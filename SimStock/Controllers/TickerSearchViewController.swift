@@ -8,7 +8,7 @@
 import Foundation
 import UIKit
 class TickerSearchViewController: UIViewController{
-    
+    private let constants = K()
     private weak var tickerTableView: UITableView!
     private weak var tickerSearchBar: UISearchBar!
     
@@ -133,7 +133,7 @@ extension TickerSearchViewController: UISearchBarDelegate{
 //extension for URL requests
 extension TickerSearchViewController{
     func getStockData(ticker: String){
-        let urlString = "http://localhost:3000/current/ibm"
+        let urlString = constants.requestURL + "/current/" + ticker
         let url = URL(string: urlString)!
         let task = URLSession.shared.dataTask(with: url) { (data, response, error) in
             if error != nil || data == nil{
@@ -160,7 +160,7 @@ extension TickerSearchViewController{
     
     
     func getAllTickerSymbols(){
-        let urlString = "http://localhost:3000/ticker-symbols"
+        let urlString = constants.requestURL + "ticker-symbols"
         let url = URL(string: urlString)!
         let task = URLSession.shared.dataTask(with: url) { (data, response, error) in
             if (error != nil || data == nil){

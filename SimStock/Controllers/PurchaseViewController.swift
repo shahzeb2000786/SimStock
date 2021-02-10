@@ -8,6 +8,7 @@ import Foundation
 import UIKit
 import FirebaseFirestore
 class PurchaseViewController: UIViewController{
+    private let constants = K()
     private let numberPad = Bundle.main.loadNibNamed("NumberPad", owner: nil, options: nil)?.first as! NumberPad
     private weak var numberOfSharesLabel: UILabel!
     private weak var sharePriceLabel: UILabel!

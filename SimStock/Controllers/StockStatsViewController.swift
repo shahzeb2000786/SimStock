@@ -9,7 +9,7 @@ import UIKit
 import Charts
 import FirebaseFirestore
 class StockStatsViewController: UIViewController, UINavigationControllerDelegate{
-    
+    private let constants = K()
     lazy var lineChartView: LineChartView = {
         let chartView  = LineChartView()
         chartView.rightAxis.enabled = false
@@ -222,7 +222,7 @@ extension StockStatsViewController{
 //extension for any api calls needed for the view controller
 extension StockStatsViewController{
     func getSelectedStock(ticker: String){
-        let urlString = "http://localhost:3000/current/" + ticker
+        let urlString = constants.requestURL + "current/" + ticker
         print(urlString)
         let url = URL(string: urlString)!
         let task = URLSession.shared.dataTask(with: url) { (data, response, error) in
@@ -250,7 +250,7 @@ extension StockStatsViewController{
     
     //function calls daily stock get route which returns an array stock objects from the past 100 days
     func getDailySelectedStock(ticker: String){
-        let urlString = "http://localhost:3000/daily/" + ticker
+        let urlString = constants.requestURL + "daily/" + ticker
         print(urlString)
         let url = URL(string: urlString)!
         let task = URLSession.shared.dataTask(with: url) { (data, response, error) in
@@ -330,8 +330,7 @@ extension StockStatsViewController{
     }//end of function
     
     func canUserSellStock(tickerSymbol: String){
-        userStockAlertMessage(errorMessage: "whaddup")
-        return
+        var canSellStock = false
         let db = Firestore.firestore()
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
         let userDoc = db.collection("Users").document(appDelegate.email)
@@ -339,6 +338,7 @@ extension StockStatsViewController{
             if let error = error{
                 print(error.localizedDescription)
                 self.userStockAlertMessage(errorMessage: "There was an error in retrieving your account data")
+                return
             }
             if let document = document{
                // let updatedUserBalance = userCurrentBalance - amountDueForPayment//
@@ -362,10 +362,14 @@ extension StockStatsViewController{
                             self.userStockAlertMessage(errorMessage: "You have no shares of this stock to sell")
                             return
                         }
+                        canSellStock = true
                         self.showPurchaseScreen()
+                        return
                     }
                 }//for loop
-                self.userStockAlertMessage(errorMessage: "You have no shares of this stock to sell")
+                if canSellStock == false{
+                    self.userStockAlertMessage(errorMessage: "You have no shares of this stock to sell")
+                }
             }//optional bind of document
         }//end of closure
     }//end of function

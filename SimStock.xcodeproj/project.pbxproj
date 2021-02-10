@@ -14,6 +14,7 @@
 		BF3237D5258F08D600BA75CF /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BF3237D3258F08D600BA75CF /* Main.storyboard */; };
 		BF3237D7258F08D800BA75CF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BF3237D6258F08D800BA75CF /* Assets.xcassets */; };
 		BF3237DA258F08D800BA75CF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BF3237D8258F08D800BA75CF /* LaunchScreen.storyboard */; };
+		BFA7F1F825D3A69500047168 /* K.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFA7F1F725D3A69500047168 /* K.swift */; };
 		BFBC9F6925B14E54000D7C92 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFBC9F6825B14E54000D7C92 /* LoginViewController.swift */; };
 		BFBC9F8C25B2B149000D7C92 /* PurchaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFBC9F8B25B2B149000D7C92 /* PurchaseViewController.swift */; };
 		BFBC9F9225B2B8A2000D7C92 /* NumberPad.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFBC9F9025B2B8A2000D7C92 /* NumberPad.swift */; };
@@ -43,6 +44,7 @@
 		BF3237D6258F08D800BA75CF /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		BF3237D9258F08D800BA75CF /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		BF3237DB258F08D800BA75CF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		BFA7F1F725D3A69500047168 /* K.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = K.swift; sourceTree = "<group>"; };
 		BFBC9F6825B14E54000D7C92 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		BFBC9F8B25B2B149000D7C92 /* PurchaseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PurchaseViewController.swift; sourceTree = "<group>"; };
 		BFBC9F9025B2B8A2000D7C92 /* NumberPad.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NumberPad.swift; sourceTree = "<group>"; };
@@ -150,6 +152,7 @@
 				BFDF557B259658BF00C31A4A /* StockModel.swift */,
 				BFDF55992598645800C31A4A /* TickerModel.swift */,
 				BF26C48625B60A6C0099B3BD /* FirebaseFunctions.swift */,
+				BFA7F1F725D3A69500047168 /* K.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -306,6 +309,7 @@
 				BFDF557C259658BF00C31A4A /* StockModel.swift in Sources */,
 				BFDF558E2597A5C100C31A4A /* BottomBar.swift in Sources */,
 				BFDF55A12598FE7200C31A4A /* TickerSearchViewController.swift in Sources */,
+				BFA7F1F825D3A69500047168 /* K.swift in Sources */,
 				BF3237D2258F08D600BA75CF /* HomeViewController.swift in Sources */,
 				BFCE5504259F0A3600706F9D /* StockStatsViewController.swift in Sources */,
 				BF26C48725B60A6C0099B3BD /* FirebaseFunctions.swift in Sources */,

@@ -8,6 +8,7 @@
 import UIKit
 import Firebase
 class HomeViewController: UIViewController{
+    private let constants = K()
     private let db = Firestore.firestore()
     private let appDelegate = UIApplication.shared.delegate as! AppDelegate
     private weak var purchasedStocksTableView: UITableView!
@@ -23,7 +24,7 @@ class HomeViewController: UIViewController{
     }//end of observed property
            
     //the initial stock put into the listOfUserStocks will set the title columns for tableview
-    private var listOfUserStocks: [Stock] = [Stock(ticker: "Ticker", price: "Price",  change: "↑↓" )]{
+    private var listOfUserStocks: [Stock] = [Stock(ticker: "Ticker", price: "Price", change: "↑↓" )]{
         willSet{
             DispatchQueue.main.async{
                 self.purchasedStocksTableView.reloadData()
@@ -101,7 +102,7 @@ class HomeViewController: UIViewController{
         totalUserEquityLabel.font = UIFont(name: totalUserEquityLabel.font.fontName, size: 50)
         totalUserEquityLabel.minimumScaleFactor = 0.5
         totalUserEquityLabel.adjustsFontSizeToFitWidth = true
-        totalUserEquityLabel.text = "$10000.00"
+        totalUserEquityLabel.text = "-"
         totalUserEquityLabel.backgroundColor = UIColor.clear
         totalUserEquityLabel.textColor = UIColor.white
         totalUserEquityLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -188,7 +189,7 @@ extension HomeViewController{
 //extension for URL requests
 extension HomeViewController{
     func getStockData(ticker: String, quantityOfStockOwned: Float){
-        let urlString = "http://localhost:3000/current/" + ticker
+        let urlString = constants.requestURL + "current/" + ticker
         let url = URL(string: urlString)!
         let task = URLSession.shared.dataTask(with: url) { (data, response, error) in
             if error != nil || data == nil{
