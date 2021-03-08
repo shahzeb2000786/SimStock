@@ -33,7 +33,7 @@ class LoginViewController: UIViewController, GIDSignInDelegate{
             print(error.localizedDescription)
          }
          print("successful sign in")
-         guard let authentication = user.authentication else { return }
+         guard let authentication = user?.authentication else { return }
          let credential = GoogleAuthProvider.credential(withIDToken: authentication.idToken,
                                                            accessToken: authentication.accessToken)
          let idToken = user.authentication.idToken // Safe to send to the server

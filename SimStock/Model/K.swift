@@ -7,5 +7,5 @@
 
 import Foundation
 struct K{
-   var requestURL = "https://simstock-backend.herokuapp.com/"
+   var requestURL = "http://localhost:3000/"
 }

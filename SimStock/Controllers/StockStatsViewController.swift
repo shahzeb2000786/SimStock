@@ -29,7 +29,15 @@ class StockStatsViewController: UIViewController, UINavigationControllerDelegate
     
     weak var stockCurrentPriceLabel: UILabel!
     weak var stockStatView: StockStatView!
-   
+    
+    weak var dailyStockButton: UIButton!
+    weak var weeklyStockButton: UIButton!
+    weak var monthlyStockButton: UIButton!
+    weak var threeMonthlyStockButton: UIButton!
+    weak var yearlyStockButton: UIButton!
+    weak var fiveYearlyStockButton: UIButton!
+    weak var twentyYearlyStockButton: UIButton!
+    
     var yValues: [ChartDataEntry] = []
     var selectedStockTicker: String = "WMT" //{
     var selectedStockArray: [Stock] = []{
@@ -102,8 +110,7 @@ extension StockStatsViewController{
         let stockCurrentPriceLabel = UILabel(frame: CGRect(x: 0, y: 0, width: self.view.frame.width/1.25, height: self.view.frame.height/12))
         
         let purchaseStackView = UIStackView(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: self.view.frame.height/7))
-        let buyButton = UIButton()
-        let sellButton = UIButton()
+        let datedStockIntervalsView = UIStackView(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: self.view.frame.height/10))
         
         self.view.addSubview(bottomBar)
         self.view.addSubview(stockScrollView)
@@ -130,6 +137,7 @@ extension StockStatsViewController{
         //adding UI elements to scrollview
         stockScrollView.addSubview(stockStatView)
         stockScrollView.addSubview(purchaseStackView)
+        stockScrollView.addSubview(datedStockIntervalsView)
         stockScrollView.addSubview(lineChartView)
         stockScrollView.addSubview(stockCurrentPriceLabel)
         
@@ -140,6 +148,8 @@ extension StockStatsViewController{
             stockStatView.heightAnchor.constraint(equalToConstant: self.view.frame.height/3),
         ])
         
+        let buyButton = UIButton()
+        let sellButton = UIButton()
         //buyButton
         buyButton.backgroundColor = .systemGreen
         buyButton.setTitleColor(.white, for: .normal)
@@ -148,9 +158,6 @@ extension StockStatsViewController{
         buyButton.clipsToBounds = true
         buyButton.layer.cornerRadius = 20
         buyButton.addTarget(self, action: #selector(buyButtonAction), for: .touchUpInside)
-        NSLayoutConstraint.activate([
-            buyButton.heightAnchor.constraint(equalToConstant: purchaseStackView.frame.height/2.5),
-        ])
         //sellButton
         sellButton.backgroundColor = .systemRed
         sellButton.setTitleColor(.white, for: .normal)
@@ -158,13 +165,11 @@ extension StockStatsViewController{
         sellButton.clipsToBounds = true
         sellButton.layer.cornerRadius = 20
         sellButton.addTarget(self, action: #selector(sellButtonAction), for: .touchUpInside)
-        NSLayoutConstraint.activate([
-            sellButton.heightAnchor.constraint(equalToConstant: purchaseStackView.frame.height/2.5),
-        ])
         sellButton.setTitle("Sell", for: .normal)
         
         
-        //purchaseStackView
+        
+        //purchaseStackView which contains buy and sell button
         purchaseStackView.translatesAutoresizingMaskIntoConstraints = false
         purchaseStackView.axis = .horizontal
         purchaseStackView.alignment = .center
@@ -180,13 +185,59 @@ extension StockStatsViewController{
             purchaseStackView.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
             purchaseStackView.bottomAnchor.constraint(equalTo: stockStatView.topAnchor),
         ])
+        
+//-----------------------------dated stock interval buttons-----------------------------
+        let dailyStockButton = UIButton()
+        let weeklyStockButton = UIButton()
+        let monthlyStockButton = UIButton()
+        let threeMonthlyStockButton = UIButton()
+        let yearlyStockButton = UIButton()
+        let fiveYearlyStockButton = UIButton()
+        let twentyYearlyStockButton = UIButton()
+    
+        var stockIntervalButtons = [UIButton]()
+        stockIntervalButtons.append(dailyStockButton)
+        stockIntervalButtons.append(weeklyStockButton)
+        stockIntervalButtons.append(monthlyStockButton)
+        stockIntervalButtons.append(threeMonthlyStockButton)
+        stockIntervalButtons.append(yearlyStockButton)
+        stockIntervalButtons.append(fiveYearlyStockButton)
+        stockIntervalButtons.append(twentyYearlyStockButton)
+        
+
+        //purchaseStackView which contains buy and sell button
+        datedStockIntervalsView.translatesAutoresizingMaskIntoConstraints = false
+        datedStockIntervalsView.axis = .horizontal
+        datedStockIntervalsView.alignment = .center
+        datedStockIntervalsView.spacing = 5.0
+        datedStockIntervalsView.backgroundColor = .clear
+        datedStockIntervalsView.distribution = .fillEqually
+        
+        for button in stockIntervalButtons{
+            button.backgroundColor = .black
+            button.setTitleColor(.green, for: .normal)
+            button.titleLabel?.font = UIFont(name: (sellButton.titleLabel?.font.fontName)!, size: 20)
+           // sellButton.addTarget(self, action: #selector(sellButtonAction), for: .touchUpInside)
+            button.setTitle("1D", for: .normal)
+            datedStockIntervalsView.addArrangedSubview(button)
+        }
+        NSLayoutConstraint.activate([
+            datedStockIntervalsView.heightAnchor.constraint(equalToConstant: self.view.frame.height/15),
+            datedStockIntervalsView.widthAnchor.constraint(equalToConstant: self.view.frame.width/1.25),
+            datedStockIntervalsView.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
+            datedStockIntervalsView.bottomAnchor.constraint(equalTo: purchaseStackView.topAnchor),
+        ])
+        
+//-----------------------------dated stock interval buttons-----------------------------
+
+        
         //lineChartView
         lineChartView.translatesAutoresizingMaskIntoConstraints = false
         lineChartView.backgroundColor = UIColor.black
         NSLayoutConstraint.activate([
             lineChartView.widthAnchor.constraint(equalToConstant: self.view.frame.width),
             lineChartView.heightAnchor.constraint(equalToConstant: self.view.frame.height/2),
-            lineChartView.bottomAnchor.constraint(equalTo: purchaseStackView.topAnchor),
+            lineChartView.bottomAnchor.constraint(equalTo: datedStockIntervalsView.topAnchor),
         ])
         
         //stockCurrentPriceLabel
@@ -248,9 +299,9 @@ extension StockStatsViewController{
         task.resume()
     }//end of getStockData function
     
-    //function calls daily stock get route which returns an array stock objects from the past 100 days
+    //function calls daily stock get route which returns an array stock objects from the past n number of days
     func getDailySelectedStock(ticker: String){
-        let urlString = constants.requestURL + "daily/" + ticker
+        let urlString = constants.requestURL + "daily/" + ticker + "/200"
         print(urlString)
         let url = URL(string: urlString)!
         let task = URLSession.shared.dataTask(with: url) { (data, response, error) in
@@ -278,6 +329,8 @@ extension StockStatsViewController{
     }//end of getStockData function
 }
 
+
+//extension for the chart cocoapod library calls that are needed for this view controller
 extension StockStatsViewController: ChartViewDelegate{
     func chartValueSelected(_ chartView: ChartViewBase, entry: ChartDataEntry, highlight: Highlight) {
         let indexOfEntry = yValues.firstIndex(of: entry)
@@ -306,18 +359,18 @@ extension StockStatsViewController{
             purchaseViewController.ticker = selectedStockTicker
             purchaseViewController.sharePrice = Float(floatStockPrice) ?? 0.00
             navigationController?.pushViewController(purchaseViewController, animated: true)
-
         }
     }
     
     @objc
     func sellButtonAction(sender: UIButton!){
-        
         canUserSellStock(tickerSymbol: selectedStockTicker)
     }
     
 }
 
+
+//extension for display UI in response to a user action such as pressing the buy or sell button or displaying an error if they can't sell or buy a stock
 extension StockStatsViewController{
     func showPurchaseScreen(){
         let purchaseViewController = PurchaseViewController()
@@ -349,7 +402,6 @@ extension StockStatsViewController{
                 for (tickerKey, stockObject) in currentStocks{
                     guard let tickerKey = tickerKey as? String else{return}
                     if tickerKey == tickerSymbol{
-                        print("HIIIIIIIIIIIIIIIIIIIT")
                         guard let previouslyPurchasedStock = stockObject as? NSDictionary else{
                             self.userStockAlertMessage(errorMessage: "There was an error in retrieving this stock's information from you transaction history")
                             return}
