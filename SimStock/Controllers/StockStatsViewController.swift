@@ -40,6 +40,7 @@ class StockStatsViewController: UIViewController, UINavigationControllerDelegate
     
     var yValues: [ChartDataEntry] = []
     var selectedStockTicker: String = "WMT" //{
+    var selectedStockTotalDataArray: [Stock] = []
     var selectedStockArray: [Stock] = []{
         willSet{
             yValues = []
@@ -110,7 +111,7 @@ extension StockStatsViewController{
         let stockCurrentPriceLabel = UILabel(frame: CGRect(x: 0, y: 0, width: self.view.frame.width/1.25, height: self.view.frame.height/12))
         
         let purchaseStackView = UIStackView(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: self.view.frame.height/7))
-        let datedStockIntervalsView = UIStackView(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: self.view.frame.height/10))
+        let datedStockIntervalsStackView = UIStackView(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: self.view.frame.height/10))
         
         self.view.addSubview(bottomBar)
         self.view.addSubview(stockScrollView)
@@ -137,7 +138,7 @@ extension StockStatsViewController{
         //adding UI elements to scrollview
         stockScrollView.addSubview(stockStatView)
         stockScrollView.addSubview(purchaseStackView)
-        stockScrollView.addSubview(datedStockIntervalsView)
+        stockScrollView.addSubview(datedStockIntervalsStackView)
         stockScrollView.addSubview(lineChartView)
         stockScrollView.addSubview(stockCurrentPriceLabel)
         
@@ -204,28 +205,32 @@ extension StockStatsViewController{
         stockIntervalButtons.append(fiveYearlyStockButton)
         stockIntervalButtons.append(twentyYearlyStockButton)
         
+        let stockIntervalButtonTitles = ["1D", "1W","1M","3M","1Y","5Y","20Y"]
 
         //purchaseStackView which contains buy and sell button
-        datedStockIntervalsView.translatesAutoresizingMaskIntoConstraints = false
-        datedStockIntervalsView.axis = .horizontal
-        datedStockIntervalsView.alignment = .center
-        datedStockIntervalsView.spacing = 5.0
-        datedStockIntervalsView.backgroundColor = .clear
-        datedStockIntervalsView.distribution = .fillEqually
-        
-        for button in stockIntervalButtons{
+        datedStockIntervalsStackView.translatesAutoresizingMaskIntoConstraints = false
+        datedStockIntervalsStackView.axis = .horizontal
+        datedStockIntervalsStackView.alignment = .center
+        datedStockIntervalsStackView.spacing = 5.0
+        datedStockIntervalsStackView.backgroundColor = .clear
+        datedStockIntervalsStackView.distribution = .fillEqually
+     
+        for i in 0 ..< stockIntervalButtons.count{
+            let button = stockIntervalButtons[i]
+            let buttonTitle = stockIntervalButtonTitles[i]
             button.backgroundColor = .black
             button.setTitleColor(.green, for: .normal)
             button.titleLabel?.font = UIFont(name: (sellButton.titleLabel?.font.fontName)!, size: 20)
-           // sellButton.addTarget(self, action: #selector(sellButtonAction), for: .touchUpInside)
-            button.setTitle("1D", for: .normal)
-            datedStockIntervalsView.addArrangedSubview(button)
+            button.addTarget(self, action: #selector(dateStockIntervalButtonAction), for: .touchUpInside)
+            button.setTitle(buttonTitle, for: .normal)
+            datedStockIntervalsStackView.addArrangedSubview(button)
         }
+        
         NSLayoutConstraint.activate([
-            datedStockIntervalsView.heightAnchor.constraint(equalToConstant: self.view.frame.height/15),
-            datedStockIntervalsView.widthAnchor.constraint(equalToConstant: self.view.frame.width/1.25),
-            datedStockIntervalsView.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
-            datedStockIntervalsView.bottomAnchor.constraint(equalTo: purchaseStackView.topAnchor),
+            datedStockIntervalsStackView.heightAnchor.constraint(equalToConstant: self.view.frame.height/18),
+            datedStockIntervalsStackView.widthAnchor.constraint(equalToConstant: self.view.frame.width/1.25),
+            datedStockIntervalsStackView.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
+            datedStockIntervalsStackView.bottomAnchor.constraint(equalTo: purchaseStackView.topAnchor),
         ])
         
 //-----------------------------dated stock interval buttons-----------------------------
@@ -237,7 +242,7 @@ extension StockStatsViewController{
         NSLayoutConstraint.activate([
             lineChartView.widthAnchor.constraint(equalToConstant: self.view.frame.width),
             lineChartView.heightAnchor.constraint(equalToConstant: self.view.frame.height/2),
-            lineChartView.bottomAnchor.constraint(equalTo: datedStockIntervalsView.topAnchor),
+            lineChartView.bottomAnchor.constraint(equalTo: datedStockIntervalsStackView.topAnchor),
         ])
         
         //stockCurrentPriceLabel
@@ -301,7 +306,7 @@ extension StockStatsViewController{
     
     //function calls daily stock get route which returns an array stock objects from the past n number of days
     func getDailySelectedStock(ticker: String){
-        let urlString = constants.requestURL + "daily/" + ticker + "/200"
+        let urlString = constants.requestURL + "daily/" + ticker + "/" + "1000"
         print(urlString)
         let url = URL(string: urlString)!
         let task = URLSession.shared.dataTask(with: url) { (data, response, error) in
@@ -319,7 +324,8 @@ extension StockStatsViewController{
                 print(data)
                 let decoder = JSONDecoder()
                 let stockData = try decoder.decode([Stock].self, from: data!)
-                self.selectedStockArray = stockData
+                self.selectedStockTotalDataArray = stockData
+                self.selectedStockArray = Array(stockData[0...7])
             }catch{
                 print ("Error in decoding JSON" + error.localizedDescription)
             }
@@ -359,6 +365,14 @@ extension StockStatsViewController{
             purchaseViewController.ticker = selectedStockTicker
             purchaseViewController.sharePrice = Float(floatStockPrice) ?? 0.00
             navigationController?.pushViewController(purchaseViewController, animated: true)
+        }
+    }
+    
+    
+    @objc
+    func dateStockIntervalButtonAction(sender: UIButton!){
+        if (sender.currentTitle == "3M"){
+            self.selectedStockArray = Array(self.selectedStockTotalDataArray[0...90])
         }
     }
     
