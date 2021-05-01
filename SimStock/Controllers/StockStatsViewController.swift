@@ -371,6 +371,25 @@ extension StockStatsViewController{
     
     @objc
     func dateStockIntervalButtonAction(sender: UIButton!){
+        switch(sender.currentTitle){
+        case "1D":
+            self.selectedStockArray = Array(self.selectedStockTotalDataArray[0...1])
+        case "1W":
+            self.selectedStockArray = Array(self.selectedStockTotalDataArray[0...7])
+        case "1M":
+            self.selectedStockArray = Array(self.selectedStockTotalDataArray[0...30])
+        case "3M":
+            self.selectedStockArray = Array(self.selectedStockTotalDataArray[0...90])
+        case "1Y":
+            self.selectedStockArray = Array(self.selectedStockTotalDataArray[0...365])
+        case "5Y":
+            self.selectedStockArray = Array(self.selectedStockTotalDataArray[0...11825])
+        case "20Y":
+            self.selectedStockArray = Array(self.selectedStockTotalDataArray[0...47300])
+        default:
+            self.selectedStockArray = Array(self.selectedStockTotalDataArray[0...30])
+        }
+        
         if (sender.currentTitle == "3M"){
             self.selectedStockArray = Array(self.selectedStockTotalDataArray[0...90])
         }

@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		BF26C48725B60A6C0099B3BD /* FirebaseFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF26C48625B60A6C0099B3BD /* FirebaseFunctions.swift */; };
+		BF2E400C263D227200FDE946 /* StockStatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF2E400A263D227200FDE946 /* StockStatView.swift */; };
+		BF2E400D263D227200FDE946 /* StockStatView.xib in Resources */ = {isa = PBXBuildFile; fileRef = BF2E400B263D227200FDE946 /* StockStatView.xib */; };
 		BF3237CE258F08D600BA75CF /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF3237CD258F08D600BA75CF /* AppDelegate.swift */; };
 		BF3237D0258F08D600BA75CF /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF3237CF258F08D600BA75CF /* SceneDelegate.swift */; };
 		BF3237D2258F08D600BA75CF /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF3237D1258F08D600BA75CF /* HomeViewController.swift */; };
@@ -20,8 +22,6 @@
 		BFBC9F9225B2B8A2000D7C92 /* NumberPad.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFBC9F9025B2B8A2000D7C92 /* NumberPad.swift */; };
 		BFBC9F9325B2B8A2000D7C92 /* NumberPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = BFBC9F9125B2B8A2000D7C92 /* NumberPad.xib */; };
 		BFCE5504259F0A3600706F9D /* StockStatsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFCE5503259F0A3600706F9D /* StockStatsViewController.swift */; };
-		BFCE551125A19FCD00706F9D /* StockStatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFCE550F25A19FCD00706F9D /* StockStatView.swift */; };
-		BFCE551225A19FCD00706F9D /* StockStatView.xib in Resources */ = {isa = PBXBuildFile; fileRef = BFCE551025A19FCD00706F9D /* StockStatView.xib */; };
 		BFCE553225B0145000706F9D /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = BFCE553125B0145000706F9D /* GoogleService-Info.plist */; };
 		BFDF557C259658BF00C31A4A /* StockModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFDF557B259658BF00C31A4A /* StockModel.swift */; };
 		BFDF5580259712A200C31A4A /* StockInfoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFDF557E259712A200C31A4A /* StockInfoCell.swift */; };
@@ -36,6 +36,8 @@
 /* Begin PBXFileReference section */
 		76108C70A46CB465E74D6368 /* Pods-SimStock.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SimStock.debug.xcconfig"; path = "Target Support Files/Pods-SimStock/Pods-SimStock.debug.xcconfig"; sourceTree = "<group>"; };
 		BF26C48625B60A6C0099B3BD /* FirebaseFunctions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseFunctions.swift; sourceTree = "<group>"; };
+		BF2E400A263D227200FDE946 /* StockStatView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StockStatView.swift; sourceTree = "<group>"; };
+		BF2E400B263D227200FDE946 /* StockStatView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = StockStatView.xib; sourceTree = "<group>"; };
 		BF3237CA258F08D600BA75CF /* SimStock.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SimStock.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BF3237CD258F08D600BA75CF /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		BF3237CF258F08D600BA75CF /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -50,8 +52,6 @@
 		BFBC9F9025B2B8A2000D7C92 /* NumberPad.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NumberPad.swift; sourceTree = "<group>"; };
 		BFBC9F9125B2B8A2000D7C92 /* NumberPad.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = NumberPad.xib; sourceTree = "<group>"; };
 		BFCE5503259F0A3600706F9D /* StockStatsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StockStatsViewController.swift; sourceTree = "<group>"; };
-		BFCE550F25A19FCD00706F9D /* StockStatView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StockStatView.swift; sourceTree = "<group>"; };
-		BFCE551025A19FCD00706F9D /* StockStatView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = StockStatView.xib; sourceTree = "<group>"; };
 		BFCE553125B0145000706F9D /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "GoogleService-Info.plist"; sourceTree = SOURCE_ROOT; };
 		BFDF557B259658BF00C31A4A /* StockModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StockModel.swift; sourceTree = "<group>"; };
 		BFDF557E259712A200C31A4A /* StockInfoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StockInfoCell.swift; sourceTree = "<group>"; };
@@ -138,8 +138,8 @@
 				BFDF557F259712A200C31A4A /* StockInfoCell.xib */,
 				BFDF558D2597A5C100C31A4A /* BottomBar.swift */,
 				BFDF55962597A73E00C31A4A /* BottomBar.xib */,
-				BFCE550F25A19FCD00706F9D /* StockStatView.swift */,
-				BFCE551025A19FCD00706F9D /* StockStatView.xib */,
+				BF2E400A263D227200FDE946 /* StockStatView.swift */,
+				BF2E400B263D227200FDE946 /* StockStatView.xib */,
 				BFBC9F9025B2B8A2000D7C92 /* NumberPad.swift */,
 				BFBC9F9125B2B8A2000D7C92 /* NumberPad.xib */,
 			);
@@ -226,7 +226,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				BFCE551225A19FCD00706F9D /* StockStatView.xib in Resources */,
+				BF2E400D263D227200FDE946 /* StockStatView.xib in Resources */,
 				BF3237DA258F08D800BA75CF /* LaunchScreen.storyboard in Resources */,
 				BFDF5581259712A200C31A4A /* StockInfoCell.xib in Resources */,
 				BF3237D7258F08D800BA75CF /* Assets.xcassets in Resources */,
@@ -312,10 +312,10 @@
 				BFA7F1F825D3A69500047168 /* K.swift in Sources */,
 				BF3237D2258F08D600BA75CF /* HomeViewController.swift in Sources */,
 				BFCE5504259F0A3600706F9D /* StockStatsViewController.swift in Sources */,
+				BF2E400C263D227200FDE946 /* StockStatView.swift in Sources */,
 				BF26C48725B60A6C0099B3BD /* FirebaseFunctions.swift in Sources */,
 				BF3237CE258F08D600BA75CF /* AppDelegate.swift in Sources */,
 				BFBC9F8C25B2B149000D7C92 /* PurchaseViewController.swift in Sources */,
-				BFCE551125A19FCD00706F9D /* StockStatView.swift in Sources */,
 				BF3237D0258F08D600BA75CF /* SceneDelegate.swift in Sources */,
 				BFBC9F6925B14E54000D7C92 /* LoginViewController.swift in Sources */,
 			);
