@@ -46,7 +46,7 @@ class StockStatsViewController: UIViewController, UINavigationControllerDelegate
             yValues = []
             DispatchQueue.main.async{
                 var increment = 0.0
-                for stock in self.selectedStockArray{
+                for stock in self.selectedStockArray.reversed(){
                     let entry = ChartDataEntry(x: increment, y: Double(stock.price!) ?? 10.00)
                     self.yValues.append(entry)
                     increment += 1
@@ -306,7 +306,7 @@ extension StockStatsViewController{
     
     //function calls daily stock get route which returns an array stock objects from the past n number of days
     func getDailySelectedStock(ticker: String){
-        let urlString = constants.requestURL + "daily/" + ticker + "/" + "1000"
+        let urlString = constants.requestURL + "daily/" + ticker + "/" + "29200"
         print(urlString)
         let url = URL(string: urlString)!
         let task = URLSession.shared.dataTask(with: url) { (data, response, error) in
@@ -324,6 +324,7 @@ extension StockStatsViewController{
                 print(data)
                 let decoder = JSONDecoder()
                 let stockData = try decoder.decode([Stock].self, from: data!)
+                print(stockData)
                 self.selectedStockTotalDataArray = stockData
                 self.selectedStockArray = Array(stockData[0...7])
             }catch{
@@ -371,6 +372,7 @@ extension StockStatsViewController{
     
     @objc
     func dateStockIntervalButtonAction(sender: UIButton!){
+        print(self.selectedStockTotalDataArray.count)
         switch(sender.currentTitle){
         case "1D":
             self.selectedStockArray = Array(self.selectedStockTotalDataArray[0...1])
@@ -383,9 +385,9 @@ extension StockStatsViewController{
         case "1Y":
             self.selectedStockArray = Array(self.selectedStockTotalDataArray[0...365])
         case "5Y":
-            self.selectedStockArray = Array(self.selectedStockTotalDataArray[0...11825])
+            self.selectedStockArray = Array(self.selectedStockTotalDataArray[0...7200])
         case "20Y":
-            self.selectedStockArray = Array(self.selectedStockTotalDataArray[0...47300])
+            self.selectedStockArray = Array(self.selectedStockTotalDataArray[0...29100])
         default:
             self.selectedStockArray = Array(self.selectedStockTotalDataArray[0...30])
         }
