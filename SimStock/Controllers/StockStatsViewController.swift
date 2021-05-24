@@ -279,7 +279,6 @@ extension StockStatsViewController{
 extension StockStatsViewController{
     func getSelectedStock(ticker: String){
         let urlString = constants.requestURL + "current/" + ticker
-        print(urlString)
         let url = URL(string: urlString)!
         let task = URLSession.shared.dataTask(with: url) { (data, response, error) in
             if error != nil || data == nil{
@@ -292,7 +291,6 @@ extension StockStatsViewController{
                 fatalError("Error in getting response from server")
             }
             do{
-                print(data)
                 let decoder = JSONDecoder()
                 let stockData = try decoder.decode(Stock.self, from: data!)
                 self.selectedStock = stockData
@@ -307,7 +305,6 @@ extension StockStatsViewController{
     //function calls daily stock get route which returns an array stock objects from the past n number of days
     func getDailySelectedStock(ticker: String){
         let urlString = constants.requestURL + "daily/" + ticker + "/" + "29200"
-        print(urlString)
         let url = URL(string: urlString)!
         let task = URLSession.shared.dataTask(with: url) { (data, response, error) in
             if error != nil || data == nil{
@@ -321,10 +318,8 @@ extension StockStatsViewController{
                 fatalError("Error in getting response from server")
             }
             do{
-                print(data)
                 let decoder = JSONDecoder()
                 let stockData = try decoder.decode([Stock].self, from: data!)
-                print(stockData)
                 self.selectedStockTotalDataArray = stockData
                 self.selectedStockArray = Array(stockData[0...7])
             }catch{
@@ -344,7 +339,6 @@ extension StockStatsViewController: ChartViewDelegate{
         //lineChartView.lineData?.entryForHighlight(highlight)
         let selectedPriceAtDate = (selectedStockArray[indexOfEntry!].price)
         selectedStockPrice = selectedPriceAtDate!
-        print(selectedStockPrice)
     }
     
     func setData() {
@@ -372,7 +366,6 @@ extension StockStatsViewController{
     
     @objc
     func dateStockIntervalButtonAction(sender: UIButton!){
-        print(self.selectedStockTotalDataArray.count)
         switch(sender.currentTitle){
         case "1D":
             self.selectedStockArray = Array(self.selectedStockTotalDataArray[0...1])
