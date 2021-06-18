@@ -283,7 +283,6 @@ extension StockStatsViewController{
         let task = URLSession.shared.dataTask(with: url) { (data, response, error) in
             if error != nil || data == nil{
                 print(error?.localizedDescription)
-                print("There was an error in retreiving information from the Alpha Vantage Api")
                 fatalError("There was an error in retreiving information from the Alpha Vantage Api")
             }
             guard let response = response as? HTTPURLResponse, (200...299).contains(response.statusCode)else{
@@ -314,13 +313,12 @@ extension StockStatsViewController{
                 
             }
             guard let response = response as? HTTPURLResponse, (200...299).contains(response.statusCode)else{
-                print("Error in server")
                 fatalError("Error in getting response from server")
             }
             do{
                 let decoder = JSONDecoder()
                 let stockData = try decoder.decode([Stock].self, from: data!)
-                self.selectedStockTotalDataArray = stockData
+                self.selectedStockTotalDataArray = stockData.reversed()
                 self.selectedStockArray = Array(stockData[0...7])
             }catch{
                 print ("Error in decoding JSON" + error.localizedDescription)
@@ -368,19 +366,19 @@ extension StockStatsViewController{
     func dateStockIntervalButtonAction(sender: UIButton!){
         switch(sender.currentTitle){
         case "1D":
-            self.selectedStockArray = Array(self.selectedStockTotalDataArray[0...1])
+            self.selectedStockArray = Array(self.selectedStockTotalDataArray[0...1].reversed())
         case "1W":
-            self.selectedStockArray = Array(self.selectedStockTotalDataArray[0...7])
+            self.selectedStockArray = Array(self.selectedStockTotalDataArray[0...7].reversed())
         case "1M":
-            self.selectedStockArray = Array(self.selectedStockTotalDataArray[0...30])
+            self.selectedStockArray = Array(self.selectedStockTotalDataArray[0...30].reversed())
         case "3M":
-            self.selectedStockArray = Array(self.selectedStockTotalDataArray[0...90])
+            self.selectedStockArray = Array(self.selectedStockTotalDataArray[0...90].reversed())
         case "1Y":
-            self.selectedStockArray = Array(self.selectedStockTotalDataArray[0...365])
+            self.selectedStockArray = Array(self.selectedStockTotalDataArray[0...365].reversed())
         case "5Y":
-            self.selectedStockArray = Array(self.selectedStockTotalDataArray[0...7200])
+            self.selectedStockArray = Array(self.selectedStockTotalDataArray[0...7200].reversed())
         case "20Y":
-            self.selectedStockArray = Array(self.selectedStockTotalDataArray[0...29100])
+            self.selectedStockArray = Array(self.selectedStockTotalDataArray[0...29100].reversed())
         default:
             self.selectedStockArray = Array(self.selectedStockTotalDataArray[0...30])
         }
