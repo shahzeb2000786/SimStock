@@ -16,6 +16,7 @@ struct Stock: Codable{
     var volume: String?
     var date: String?
     var previousClose: String?
+    var quantity: String?
     var change: String?
     var changePercent: String?
     var exchange: String?

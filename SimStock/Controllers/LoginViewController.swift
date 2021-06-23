@@ -59,7 +59,7 @@ class LoginViewController: UIViewController, GIDSignInDelegate{
         db.collection("Users").whereField("email", isEqualTo: self.appDelegate.email)
         .getDocuments() { (querySnapshot, err) in
            if let err = err {
-               print("Error getting documents: \(err)")
+            fatalError("Error getting documents: \(err)")
            } else {
                if (querySnapshot!.documents == []){
                 self.db.collection("Users").document(email).setData([

@@ -24,7 +24,7 @@ class HomeViewController: UIViewController{
     }//end of observed property
            
     //the initial stock put into the listOfUserStocks will set the title columns for tableview
-    private var listOfUserStocks: [Stock] = [Stock(ticker: "Ticker", price: "Price", change: "↑↓" )]{
+    private var listOfUserStocks: [Stock] = [Stock(ticker: "Ticker", price: "Price", quantity: "quantity", change: "↑↓"  )]{
         willSet{
             DispatchQueue.main.async{
                 self.purchasedStocksTableView.reloadData()
@@ -168,9 +168,13 @@ extension HomeViewController: UITableViewDataSource{
         cell.amountGrownLabel.font = UIFont(name: cell.amountGrownLabel.font.fontName, size: 25)
         cell.amountGrownLabel.textColor = UIColor.white
             let currentStock = self.listOfUserStocks[indexPath.row]
+        print("@@@@@@@@@@@@@@@@@")
+        print(currentStock)
+        print("@@@@@@@@@@@@@@@@@")
+
             cell.tickerLabel.text = currentStock.ticker
             cell.stockValueLabel.text = currentStock.price
-            cell.quantityLabel.text = "1"
+        cell.quantityLabel.text = currentStock.quantity
             cell.amountGrownLabel.text = currentStock.change
        // }
         cell.awakeFromNib()
