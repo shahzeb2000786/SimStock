@@ -38,8 +38,6 @@ class HomeViewController: UIViewController{
         Auth.auth().createUser(withEmail: "shahzeb2000786@gmail.com", password: "random") { authResult, error in
             if let error = error {
                 print(error.localizedDescription)
-            } else{
-                print( authResult)
             }
         }
         //instantiation of UI elements for view
@@ -122,7 +120,6 @@ class HomeViewController: UIViewController{
             tickerSearchBar.heightAnchor.constraint(equalToConstant: self.view.frame.height/14),
             tickerSearchBar.topAnchor.constraint(equalTo: self.view.layoutMarginsGuide.topAnchor)
         ])
-        print(self.view.safeAreaInsets.top)
 
         self.totalUserEquityLabel = totalUserEquityLabel
         self.purchasedStocksTableView = purchasedStocksTableView
@@ -168,15 +165,11 @@ extension HomeViewController: UITableViewDataSource{
         cell.amountGrownLabel.font = UIFont(name: cell.amountGrownLabel.font.fontName, size: 25)
         cell.amountGrownLabel.textColor = UIColor.white
             let currentStock = self.listOfUserStocks[indexPath.row]
-        print("@@@@@@@@@@@@@@@@@")
-        print(currentStock)
-        print("@@@@@@@@@@@@@@@@@")
 
             cell.tickerLabel.text = currentStock.ticker
             cell.stockValueLabel.text = currentStock.price
-        cell.quantityLabel.text = currentStock.quantity
+            cell.quantityLabel.text = currentStock.quantity
             cell.amountGrownLabel.text = currentStock.change
-       // }
         cell.awakeFromNib()
         return cell
     }
@@ -198,11 +191,9 @@ extension HomeViewController{
         let task = URLSession.shared.dataTask(with: url) { (data, response, error) in
             if error != nil || data == nil{
                 print(error?.localizedDescription)
-                print("There was an error in retreiving information from the Alpha Vantage Api")
                 fatalError("There was an error in retreiving information from the Alpha Vantage Api")
             }
             guard let response = response as? HTTPURLResponse, (200...299).contains(response.statusCode)else{
-                print("Error in server")
                 fatalError("Error in getting response from server")
             }
             do{
@@ -212,11 +203,6 @@ extension HomeViewController{
                 if let stockPrice = (stockData.price) {
                     if let floatStockPrice = Float(stockPrice){
                         let totalStockValueOwned = floatStockPrice * quantityOfStockOwned
-                        print("----------------------------")
-                        print(ticker)
-                        print(stockData.ticker)
-                        print(quantityOfStockOwned)
-                        print("----------------------------")
                         self.totalUserEquity += totalStockValueOwned
                     }//inner optional bind floatStockPrice
                     self.listOfUserStocks.append(stockData)//only appends stock if it has a price
@@ -239,7 +225,6 @@ extension HomeViewController{
                 return
             }
             if let document = document{
-               // let updatedUserBalance = userCurrentBalance - amountDueForPayment//
                 guard var userCurrentBalance = document.get("currentBalance") as? Float else{return}
                 guard let currentStocks = document.get("stocks") as? NSDictionary else {
                     print(error?.localizedDescription ?? "Could not get stocks as NSdictioanry")
@@ -247,7 +232,6 @@ extension HomeViewController{
                 self.totalUserEquity = userCurrentBalance
                 for (tickerKey, stockObject) in currentStocks{
                     guard let tickerKey = tickerKey as? String else{continue}
-                    print(tickerKey)
                     guard let stockObject = stockObject as? NSDictionary else{continue}
                     guard let quantityOfStockOwned = stockObject["quantity"] as? Float else{continue}
                     

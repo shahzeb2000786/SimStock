@@ -286,7 +286,6 @@ extension StockStatsViewController{
                 fatalError("There was an error in retreiving information from the Alpha Vantage Api")
             }
             guard let response = response as? HTTPURLResponse, (200...299).contains(response.statusCode)else{
-                print("Error in server")
                 fatalError("Error in getting response from server")
             }
             do{
@@ -294,7 +293,8 @@ extension StockStatsViewController{
                 let stockData = try decoder.decode(Stock.self, from: data!)
                 self.selectedStock = stockData
             }catch{
-                print ("Error in decoding JSON" + error.localizedDescription)
+                fatalError("Error in decoding JSON" + error.localizedDescription)
+
             }
             
         }//end of task
@@ -308,7 +308,6 @@ extension StockStatsViewController{
         let task = URLSession.shared.dataTask(with: url) { (data, response, error) in
             if error != nil || data == nil{
                 print(error?.localizedDescription)
-                print("There was an error in retreiving information from the Alpha Vantage Api")
                 fatalError("There was an error in retreiving information from the Alpha Vantage Api")
                 
             }
@@ -321,7 +320,7 @@ extension StockStatsViewController{
                 self.selectedStockTotalDataArray = stockData.reversed()
                 self.selectedStockArray = Array(stockData[0...7])
             }catch{
-                print ("Error in decoding JSON" + error.localizedDescription)
+                fatalError("Error in decoding JSON" + error.localizedDescription)
             }
             
         }//end of task
@@ -416,7 +415,7 @@ extension StockStatsViewController{
         userDoc.getDocument { (document, error) in
             if let error = error{
                 print(error.localizedDescription)
-                self.userStockAlertMessage(errorMessage: "There was an error in retrieving your account data")
+                self.userStockAlertMessage(errorMessage: "Error: Account data retrieval failed")
                 return
             }
             if let document = document{

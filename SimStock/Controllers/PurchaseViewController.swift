@@ -78,7 +78,6 @@ class PurchaseViewController: UIViewController{
             stack.backgroundColor = .clear
             stack.distribution = .fillEqually
             var i = 0
-            print(labels.count)
             for label in labels{
 
                 label.textColor = .white
@@ -175,15 +174,12 @@ extension PurchaseViewController{
     @objc
     func deleteKeyPressed(sender: UIButton!){
         if var sharesText = numberOfSharesLabel.text{
-            print(sharesText)
             if sharesText.count == 0{
                 numberOfSharesLabel.text? = ""
                 self.quantity = 0
             }
             else{
-                print("delete hit")
                 numberOfSharesLabel.text?.removeLast()
-                print(numberOfSharesLabel.text)
                 self.quantity = Float(numberOfSharesLabel.text!) ?? 0.00
             }
         }//end of optional bind
@@ -246,7 +242,6 @@ extension PurchaseViewController{
                             return}
                         totalSpentOnStock += amountDueForPayment
                         currentNumOfStockOwned += quantity
-                        print(currentNumOfStockOwned)
                         let stockToAdd = ["ticker": tickerSymbol, "quantity": currentNumOfStockOwned, "totalAmountPaid": totalSpentOnStock] as [String : Any]
                         userDoc.updateData(["stocks." + tickerSymbol : stockToAdd, "currentBalance": updatedUserBalance])
                         self.showSimpleAlert(isTransactionSuccesful: true, message: "")

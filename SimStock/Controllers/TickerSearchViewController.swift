@@ -104,7 +104,6 @@ extension TickerSearchViewController: UITableViewDataSource{
 extension TickerSearchViewController: UITableViewDelegate{
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let selectedTickerSymbol = tickersToBeDisplayed[indexPath.row].displaySymbol
-        print(selectedTickerSymbol)
         
         let stockStatsViewController = StockStatsViewController()
         stockStatsViewController.selectedStockTicker = selectedTickerSymbol
@@ -115,7 +114,6 @@ extension TickerSearchViewController: UITableViewDelegate{
 //extension for UISearchBar Delegate
 extension TickerSearchViewController: UISearchBarDelegate{
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        print(tickerSearchBar.text)
         if let searchedTickerText = tickerSearchBar.text{
             if searchedTickerText == ""{
                 tickersToBeDisplayed = tickersSymbolsList
@@ -138,12 +136,10 @@ extension TickerSearchViewController{
         let task = URLSession.shared.dataTask(with: url) { (data, response, error) in
             if error != nil || data == nil{
                 print(error?.localizedDescription)
-                print("There was an error in retreiving information from the Alpha Vantage Api")
                 fatalError("There was an error in retreiving information from the Alpha Vantage Api")
                 
             }
             guard let response = response as? HTTPURLResponse, (200...299).contains(response.statusCode)else{
-                print("Error in server")
                 fatalError("Error in getting response from server")
             }
             do{
