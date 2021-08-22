@@ -46,7 +46,7 @@ class StockStatsViewController: UIViewController, UINavigationControllerDelegate
             yValues = []
             DispatchQueue.main.async{
                 var increment = 0.0
-                for stock in self.selectedStockArray.reversed(){
+                for stock in self.selectedStockArray{
                     let entry = ChartDataEntry(x: increment, y: Double(stock.price!) ?? 10.00)
                     self.yValues.append(entry)
                     increment += 1
@@ -317,7 +317,7 @@ extension StockStatsViewController{
             do{
                 let decoder = JSONDecoder()
                 let stockData = try decoder.decode([Stock].self, from: data!)
-                self.selectedStockTotalDataArray = stockData.reversed()
+                self.selectedStockTotalDataArray = stockData
                 self.selectedStockArray = Array(stockData[0...7])
             }catch{
                 fatalError("Error in decoding JSON" + error.localizedDescription)
@@ -379,11 +379,11 @@ extension StockStatsViewController{
         case "20Y":
             self.selectedStockArray = Array(self.selectedStockTotalDataArray[0...29100].reversed())
         default:
-            self.selectedStockArray = Array(self.selectedStockTotalDataArray[0...30])
+            self.selectedStockArray = Array(self.selectedStockTotalDataArray[0...30].reversed())
         }
         
         if (sender.currentTitle == "3M"){
-            self.selectedStockArray = Array(self.selectedStockTotalDataArray[0...90])
+            self.selectedStockArray = Array(self.selectedStockTotalDataArray[0...90].reversed())
         }
     }
     
