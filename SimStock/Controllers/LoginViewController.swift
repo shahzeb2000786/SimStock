@@ -49,6 +49,7 @@ class LoginViewController: UIViewController, GIDSignInDelegate{
                 self.navigationController?.pushViewController(homeViewController, animated: true)
                }
                else{
+                   fatalError("User could not be authenticated")
                    print("User could not be authenticated")
                }//else
            }
