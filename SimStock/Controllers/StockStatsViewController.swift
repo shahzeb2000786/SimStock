@@ -308,7 +308,7 @@ extension StockStatsViewController{
         let task = URLSession.shared.dataTask(with: url) { (data, response, error) in
             if error != nil || data == nil{
                 print(error?.localizedDescription)
-                fatalError("There was an error in retreiving information from the Alpha Vantage Api")
+                fatalError("There was an error in retreiving information from the Alpha Vantage Api: " + error!.localizedDescription )
                 
             }
             guard let response = response as? HTTPURLResponse, (200...299).contains(response.statusCode)else{
