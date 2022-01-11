@@ -14,7 +14,7 @@ class HomeViewController: UIViewController{
     private weak var purchasedStocksTableView: UITableView!
     private weak var totalUserEquityLabel: UILabel!
 
-    
+
     private var totalUserEquity: Float = 0.00 {
         willSet{
             DispatchQueue.main.async{
@@ -22,7 +22,7 @@ class HomeViewController: UIViewController{
             }//dispatchqueue
         }//willSet
     }//end of observed property
-           
+
     //the initial stock put into the listOfUserStocks will set the title columns for tableview
     private var listOfUserStocks: [Stock] = [Stock(ticker: "Ticker", price: "Price", quantity: "quantity", change: "↑↓"  )]{
         willSet{
@@ -31,7 +31,7 @@ class HomeViewController: UIViewController{
             }//dispatchqueue
         }//willSet
     }//end of observed property
- 
+
     override func loadView(){
         super.loadView()
         let firebaseFunctions = FirebaseFunctions()
@@ -49,14 +49,14 @@ class HomeViewController: UIViewController{
         let amountOfUserStockGrowthLabel = UILabel()
         let totalUserEquityLabel = UILabel()
         let tickerSearchBar = UISearchBar()
-        
+
         //adding ui elements to main view
         self.view.addSubview(bottomBar)
         self.view.addSubview((purchasedStocksTableView))
         self.view.addSubview(totalUserEquityLabel)
         self.view.addSubview(amountOfUserStockGrowthLabel)
         self.view.addSubview(tickerSearchBar)
-        
+
         //bottomBar
         bottomBar.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
@@ -64,7 +64,7 @@ class HomeViewController: UIViewController{
             bottomBar.heightAnchor.constraint(equalToConstant: self.view.frame.height/10.5),
             bottomBar.bottomAnchor.constraint(equalTo: self.view.bottomAnchor)
         ])
-        
+
         //purchaseStocksTableView
         purchasedStocksTableView.translatesAutoresizingMaskIntoConstraints = false
         purchasedStocksTableView.separatorColor = UIColor.gray
@@ -98,7 +98,7 @@ class HomeViewController: UIViewController{
         //totalMoneyEarnedLabel
         totalUserEquityLabel.textAlignment = .center
         totalUserEquityLabel.font = UIFont(name: totalUserEquityLabel.font.fontName, size: 50)
-        totalUserEquityLabel.minimumScaleFactor = 0.5
+        totalUserEquityLabel.minimumScaleFactor = 0.3
         totalUserEquityLabel.adjustsFontSizeToFitWidth = true
         totalUserEquityLabel.text = "-"
         totalUserEquityLabel.backgroundColor = UIColor.clear
@@ -110,7 +110,7 @@ class HomeViewController: UIViewController{
             totalUserEquityLabel.bottomAnchor.constraint(equalTo: amountOfUserStockGrowthLabel.topAnchor),
             totalUserEquityLabel.centerXAnchor.constraint(equalTo: self.view.centerXAnchor)
         ])
-        
+
         tickerSearchBar.placeholder = "Enter ticker symbol"
         tickerSearchBar.barTintColor = UIColor.black
         tickerSearchBar.barStyle = UIBarStyle(rawValue: 2)!
@@ -126,14 +126,14 @@ class HomeViewController: UIViewController{
         firebaseFunctions.setUserBalanceLabel(labelToUpdate: self.totalUserEquityLabel)
 
     }
-    
+
     override func viewDidLoad() {
         getUsersStock()
         super.viewDidLoad()
         navigationItem.hidesBackButton = false
         //getStockData(ticker: "ibm")
     }
-    
+
 
 
 }
@@ -151,7 +151,7 @@ extension HomeViewController: UITableViewDelegate{
             stockStatsViewController.selectedStockTicker = selectedTickerSymbol ?? "MSFT"
             self.navigationController?.pushViewController(stockStatsViewController, animated: true)
         }//if
-       
+
     }//end of function
 }//end of extension
 
@@ -199,7 +199,7 @@ extension HomeViewController{
             do{
                 let decoder = JSONDecoder()
                 let stockData = try decoder.decode(Stock.self, from: data!)
-                
+
                 if let stockPrice = (stockData.price) {
                     if let floatStockPrice = Float(stockPrice){
                         let totalStockValueOwned = floatStockPrice * quantityOfStockOwned
@@ -207,7 +207,7 @@ extension HomeViewController{
                     }//inner optional bind floatStockPrice
                     self.listOfUserStocks.append(stockData)//only appends stock if it has a price
                 }//outer optional bind of stockPrice
-    
+
             }catch{
                 print ("Error in decoding JSON" + error.localizedDescription)
             }
@@ -234,7 +234,7 @@ extension HomeViewController{
                     guard let tickerKey = tickerKey as? String else{continue}
                     guard let stockObject = stockObject as? NSDictionary else{continue}
                     guard let quantityOfStockOwned = stockObject["quantity"] as? Float else{continue}
-                    
+
                     self.getStockData(ticker: tickerKey, quantityOfStockOwned: quantityOfStockOwned)
                 }//for loop
             }//optional bind of document
